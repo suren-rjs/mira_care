@@ -1,0 +1,48 @@
+name: mira_care
+description: Health Care app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.3 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  get: ^4.6.5
+  intl: ^0.18.0
+  intervalprogressbar: ^2.0.1
+  google_fonts: ^4.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/mira_background.png
+    - assets/images/logo.png
+    # Icon images
+    - assets/images/dash.png
+    - assets/images/calendar.png
+    - assets/images/community.png
+    - assets/images/contact.png
+    - assets/images/journal.png
+    - assets/images/message.png
+    - assets/images/profile.png
+    - assets/images/reporting.png
+    - assets/images/settings.png
+    - assets/images/analytics.png
+    # Card Images
+    - assets/images/blood_pressure.png
+    - assets/images/heart_rate.png
+    - assets/images/sleep_rate.png
+    - assets/images/oxy_level.png
+    - assets/images/breath_rate.png
+    - assets/images/temp.png
+    - assets/images/glucose.png
+    - assets/images/weight.png
