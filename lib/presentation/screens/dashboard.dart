@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/care_recipient_profile_card.dart';
 import 'package:mira_care/presentation/components/health_score_card.dart';
 import 'package:mira_care/presentation/components/remainder.dart';
 import 'package:mira_care/presentation/components/sleep_card.dart';
+import 'package:mira_care/resources/controller/view_controller.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({
@@ -15,13 +17,16 @@ class Dashboard extends StatelessWidget {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
+    ViewController viewController = Get.put(ViewController());
 
     double reminderHeight = scrHeight * 0.11;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CareRecipientProfileCard(),
+        const CareRecipientProfileCard(
+          isDashboard: true,
+        ),
         SizedBox(
           height: scrHeight * 0.675,
           child: SingleChildScrollView(
@@ -49,15 +54,16 @@ class Dashboard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: scrHeight * 0.03),
-                const SleepScoreCard(
+                SleepCard(
                   title: 'Sleep',
                   iconUri: 'assets/images/sleep_rate.png',
                   hour: '10',
                   minutes: '34',
-                  sleepStart: 18,
+                  sleepStart: 21,
                   sleepEnd: 7,
-                  deepSleepStart: 20,
-                  deepSleepEnd: 4,
+                  deepSleepStart: 1,
+                  deepSleepEnd: 1,
+                  function: () => viewController.setNavigatorValue(12),
                 ),
                 SizedBox(height: scrHeight * 0.03),
                 Row(

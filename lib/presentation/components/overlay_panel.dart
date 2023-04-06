@@ -91,12 +91,12 @@ class _OverlayPanelState extends State<OverlayPanel> {
                       MenuItem(
                         iconUri: 'assets/images/dash.png',
                         name: 'Dashboard',
-                        function: () => controller.setNavigatorValue(0),
+                        function: () => controller.setNavigatorValue(1),
                       ),
                       MenuItem(
                         iconUri: 'assets/images/journal.png',
                         name: 'Journal',
-                        function: () => controller.setNavigatorValue(1),
+                        function: () => controller.setNavigatorValue(2),
                       ),
                       MenuItem(
                         iconUri: 'assets/images/calendar.png',

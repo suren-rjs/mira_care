@@ -46,3 +46,5 @@ flutter:
     - assets/images/temp.png
     - assets/images/glucose.png
     - assets/images/weight.png
+    # Sleep Card Images
+    - assets/images/score.png
