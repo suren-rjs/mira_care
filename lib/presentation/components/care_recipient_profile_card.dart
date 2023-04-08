@@ -24,7 +24,7 @@ class CareRecipientProfileCard extends StatelessWidget {
         'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg';
     return WillPopScope(
       onWillPop: () async {
-        Get.put(ViewController()).setNavigatorValue(1);
+        Get.put(ViewController()).changeScreenView(1);
         return false;
       },
       child: GetBuilder<ViewController>(
@@ -67,7 +67,7 @@ class CareRecipientProfileCard extends StatelessWidget {
                     height: scrHeight * 0.09,
                     width: scrHeight * 0.09,
                     child: InkWell(
-                      onTap: () => controller.setNavigatorValue(11),
+                      onTap: () => controller.changeScreenView(11),
                       child: AvatarImage(url: url),
                     ),
                   ),

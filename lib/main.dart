@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mira_care/resources/screen_controller.dart';
+import 'package:mira_care/resources/init_controllers.dart';
 
 import 'constants/app_colors.dart';
 import 'presentation/screens/home_page.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           background: appColors.scoreCardText,
         ),
       ),
-      initialBinding: ScreenController(),
+      initialBinding: InitRequiredControllers(),
       home: const MyHomePage(),
     );
   }

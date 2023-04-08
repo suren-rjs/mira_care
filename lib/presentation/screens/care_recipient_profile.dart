@@ -19,7 +19,7 @@ class CareRecipientProfileInfo extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.put(ViewController()).setNavigatorValue(1);
+        Get.put(ViewController()).changeScreenView(1);
         return false;
       },
       child: Container(

@@ -63,7 +63,7 @@ class Dashboard extends StatelessWidget {
                   sleepEnd: 7,
                   deepSleepStart: 1,
                   deepSleepEnd: 1,
-                  function: () => viewController.setNavigatorValue(12),
+                  function: () => viewController.changeScreenView(12),
                 ),
                 SizedBox(height: scrHeight * 0.03),
                 Row(

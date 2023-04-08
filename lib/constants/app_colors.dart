@@ -16,7 +16,10 @@ class _AppColors {
   final Color scoreCardText = const Color(0xFF1D3E7D);
   final Color eventNote = const Color(0xFF001640);
   final Color textGray = const Color(0xFF949494);
+  final Color msgTextGray = const Color(0xFF717171);
+  final Color messageGray = const Color(0xFFE2E2E2);
   final Color borderGray = const Color(0xFFC0C0C0);
+  final Color msgPin = const Color(0xFFD9D9D9);
   final Color backgroundGray = const Color(0xFFE8E8E8);
   final Color red = const Color(0xFFD32323);
   final Color nonSleep = const Color(0xFFCFF3FF);
