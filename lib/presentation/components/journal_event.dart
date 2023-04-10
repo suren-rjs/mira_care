@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/presentation/components/avatar_img.dart';
 
-class SleepEvent extends StatelessWidget {
-  const SleepEvent({
+class JournalEvent extends StatelessWidget {
+  const JournalEvent({
     super.key,
   });
 
@@ -12,6 +13,8 @@ class SleepEvent extends StatelessWidget {
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     double eventHeight = scrWidth * 0.17;
+    var avatarUri =
+        'https://www.tensionends.com/wp-content/uploads/2022/09/Beautiful-Girl-DP-Images-1.jpg';
     return Container(
       margin: EdgeInsets.symmetric(vertical: scrHeight * 0.005),
       width: scrWidth,
@@ -63,16 +66,35 @@ class SleepEvent extends StatelessWidget {
           ),
           SizedBox(width: scrWidth * 0.05),
           SizedBox(
-            width: scrWidth * 0.6,
+            height: scrWidth * 0.1,
+            width: scrWidth * 0.1,
+            child: AvatarImage(url: avatarUri),
+          ),
+          SizedBox(width: scrWidth * 0.05),
+          SizedBox(
+            width: scrWidth * 0.5,
             child: Center(
-              child: Text(
-                'Restless sleep - appears to be related to breath',
-                style: TextStyle(
-                  color: appColors.white,
-                  fontSize: 12 * fontScaleFactor,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                maxLines: 2,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Meals',
+                    style: TextStyle(
+                      color: appColors.white,
+                      fontSize: 16 * fontScaleFactor,
+                    ),
+                  ),
+                  Text(
+                    'Restless sleep - appears to be related to breath',
+                    style: TextStyle(
+                      color: appColors.white,
+                      fontSize: 12 * fontScaleFactor,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    maxLines: 2,
+                  ),
+                ],
               ),
             ),
           )

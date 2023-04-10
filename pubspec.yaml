@@ -13,6 +13,9 @@ dependencies:
   intl: ^0.18.0
   intervalprogressbar: ^2.0.1
   google_fonts: ^4.0.3
+  file_picker: ^5.2.7
+  video_thumbnail: ^0.5.3
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -48,3 +51,7 @@ flutter:
     - assets/images/weight.png
     # Sleep Card Images
     - assets/images/score.png
+    - assets/images/pin_icon.png
+    - assets/images/document_preview.png
+    - assets/images/music_preview.png
+    - assets/images/pdf_preview.png

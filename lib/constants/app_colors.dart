@@ -18,6 +18,9 @@ class _AppColors {
   final Color textGray = const Color(0xFF949494);
   final Color msgTextGray = const Color(0xFF717171);
   final Color messageGray = const Color(0xFFE2E2E2);
+  final Color msgInBorderGray = const Color(0xFFA3A3A3);
+  final Color msgHintGray = const Color(0xFFBDBDBD);
+  final Color attachment = const Color(0x4DA8A8A8);
   final Color borderGray = const Color(0xFFC0C0C0);
   final Color msgPin = const Color(0xFFD9D9D9);
   final Color backgroundGray = const Color(0xFFE8E8E8);
