@@ -66,32 +66,34 @@ class _JournalState extends State<Journal> {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: scrHeight * 0.02,
-                  right: scrWidth * 0.05,
-                  child: InkWell(
-                    onTap: () {
-                      _showMyDialog();
-                    },
-                    child: Container(
-                      height: scrHeight * 0.065,
-                      width: scrHeight * 0.065,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(55),
+                controller.journalPage == 1
+                    ? Positioned(
+                        top: scrHeight * 0.02,
+                        right: scrWidth * 0.05,
+                        child: InkWell(
+                          onTap: () {
+                            _showMyDialog();
+                          },
+                          child: Container(
+                            height: scrHeight * 0.065,
+                            width: scrHeight * 0.065,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(55),
                         color: appColors.scoreCardText,
                       ),
                       child: Center(
-                        child: Icon(
-                          Icons.add,
-                          size: 30,
-                          weight: 18,
-                          color: appColors.white,
-                          opticalSize: 30,
+                              child: Icon(
+                                Icons.add,
+                                size: 30,
+                                weight: 18,
+                                color: appColors.white,
+                                opticalSize: 30,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
+                      )
+                    : Container(),
                 Positioned(
                   top: scrHeight * 0.1,
                   child: SizedBox(
