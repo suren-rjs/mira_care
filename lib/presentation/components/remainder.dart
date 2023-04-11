@@ -16,7 +16,7 @@ class Remainder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double scrHeight = MediaQuery.of(context).size.height;
-    double scrWidth = MediaQuery.of(context).size.width;
+    double scrWidth = MediaQuery.of(context).size.width * 0.9;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     double dateCardHeight = scrHeight * 0.1;
     return Container(
@@ -96,7 +96,12 @@ class Remainder extends StatelessWidget {
           SizedBox(
             width: scrWidth * 0.65,
             child: Center(
-              child: Text(remainderText),
+              child: Text(
+                remainderText,
+                style: TextStyle(
+                  fontSize: 14 * fontScaleFactor,
+                ),
+              ),
             ),
           )
         ],

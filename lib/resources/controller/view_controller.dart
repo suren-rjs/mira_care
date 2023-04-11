@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mira_care/presentation/screens/calendar.dart';
 import 'package:mira_care/presentation/screens/care_recipient_profile.dart';
 import 'package:mira_care/presentation/screens/dashboard.dart';
 import 'package:mira_care/presentation/screens/journal.dart';
@@ -25,7 +26,6 @@ class ViewController extends GetxController {
 
   void _changeMainScreenView(int selectedValue) {
     _navigatorValue = selectedValue;
-    debugPrint('$selectedValue');
     switch (selectedValue) {
       case 1:
         currentScreen = const Dashboard();
@@ -40,7 +40,8 @@ class ViewController extends GetxController {
         _journalPage = 0;
         currentScreen = const Journal();
         break;
-      case 4:
+      case 3:
+        currentScreen = const Calendar();
         break;
     }
     update();

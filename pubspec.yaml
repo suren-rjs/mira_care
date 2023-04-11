@@ -16,6 +16,7 @@ dependencies:
   file_picker: ^5.2.7
   video_thumbnail: ^0.5.3
   http: ^0.13.5
+  simple_gesture_detector: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +52,11 @@ flutter:
     - assets/images/weight.png
     # Sleep Card Images
     - assets/images/score.png
+    # Journal Note Images
     - assets/images/pin_icon.png
     - assets/images/document_preview.png
     - assets/images/music_preview.png
     - assets/images/pdf_preview.png
+    # Calendar Images
+    - assets/images/calendar_img.png
+    - assets/images/search_img.png

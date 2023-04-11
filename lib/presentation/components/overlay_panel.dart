@@ -101,7 +101,7 @@ class _OverlayPanelState extends State<OverlayPanel> {
                       MenuItem(
                         iconUri: 'assets/images/calendar.png',
                         name: 'Calendar',
-                        function: () {},
+                        function: () => controller.changeScreenView(3),
                       ),
                       MenuItem(
                         iconUri: 'assets/images/community.png',

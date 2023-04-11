@@ -61,7 +61,6 @@ class _NewNoteInputState extends State<NewNoteInput> {
             File generatedImage =
                 await File('${tempDir.path}/$name.png').create();
             generatedImage.writeAsBytesSync(imageInUnit8List);
-            debugPrint(generatedImage.path);
             thumbArt.add(FileThumbArt(generatedImage, 'video', name));
           }
         } else if (['.doc', '.docx'].contains(extension)) {

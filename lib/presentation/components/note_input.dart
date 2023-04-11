@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class MessageInput extends StatefulWidget {
@@ -8,17 +10,17 @@ class MessageInput extends StatefulWidget {
 }
 
 class _MessageInputState extends State<MessageInput> {
-  TextEditingController _textEditingController = TextEditingController();
-  double _height = 10.0;
+  final TextEditingController _textEditingController = TextEditingController();
+  final double _height = 10.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25.0),
               color: Colors.grey[200],
@@ -31,7 +33,7 @@ class _MessageInputState extends State<MessageInput> {
                     maxLines: 3,
                     minLines: 1,
                     keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration.collapsed(
+                    decoration: const InputDecoration.collapsed(
                       hintText: 'Type a message...',
                     ),
                     onChanged: (value) {
@@ -40,7 +42,7 @@ class _MessageInputState extends State<MessageInput> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _textEditingController.text.trim().isEmpty
                       ? null
                       : () {
