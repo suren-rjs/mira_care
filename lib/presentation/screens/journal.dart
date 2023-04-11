@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/presentation/components/add_remainder.dart';
 import 'package:mira_care/presentation/components/journal_event_list.dart';
 import 'package:mira_care/presentation/components/new_note_input.dart';
 import 'package:mira_care/presentation/components/note_list.dart';
@@ -69,7 +70,9 @@ class _JournalState extends State<Journal> {
                   top: scrHeight * 0.02,
                   right: scrWidth * 0.05,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _showMyDialog();
+                    },
                     child: Container(
                       height: scrHeight * 0.065,
                       width: scrHeight * 0.065,
@@ -147,6 +150,68 @@ class _JournalState extends State<Journal> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    TextEditingController remainderMessage = TextEditingController();
+    double scrWidth = MediaQuery.of(context).size.width;
+    double scrHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        var buttonStyle = ElevatedButton.styleFrom(
+          backgroundColor: appColors.scoreCardText,
+        );
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              'Add Event',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: appColors.scoreCardText,
+              ),
+            ),
+          ),
+          content: AddRemainder(
+            remainderMessage: remainderMessage,
+          ),
+          actionsPadding: EdgeInsets.only(
+            right: scrWidth * 0.07,
+            bottom: scrHeight * 0.025,
+          ),
+          actions: [
+            ElevatedButton(
+              style: buttonStyle,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: appColors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: buttonStyle,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  color: appColors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

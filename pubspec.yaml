@@ -17,6 +17,8 @@ dependencies:
   video_thumbnail: ^0.5.3
   http: ^0.13.5
   simple_gesture_detector: ^0.2.0
+  day_night_time_picker: ^1.2.0+2
+  dropdown_button2: ^2.0.0
 
 dev_dependencies:
   flutter_test:

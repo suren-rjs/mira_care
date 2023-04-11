@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/presentation/components/add_remainder.dart';
 import 'package:mira_care/presentation/components/remainder.dart';
 import 'package:mira_care/presentation/components/table_calendar/customization/calendar_style.dart';
 import 'package:mira_care/presentation/components/table_calendar/table_calendar.dart';
@@ -21,12 +21,10 @@ class _CalendarState extends State<Calendar> {
   DateTime today = DateTime.now();
   DateTime currentDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
-  late String focusedMonth;
 
   @override
   void initState() {
     super.initState();
-    focusedMonth = DateFormat('MMMM yyyy').format(focusedDay);
   }
 
   @override
@@ -96,7 +94,9 @@ class _CalendarState extends State<Calendar> {
                   top: scrHeight * 0.02,
                   right: scrWidth * 0.05,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _showMyDialog();
+                    },
                     child: Container(
                       height: scrHeight * 0.065,
                       width: scrHeight * 0.065,
@@ -156,6 +156,7 @@ class _CalendarState extends State<Calendar> {
                     height: scrHeight * 0.3,
                     width: scrWidth * 0.9,
                     padding: EdgeInsets.zero,
+                    color: appColors.white,
                     child: ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: 3,
@@ -179,6 +180,68 @@ class _CalendarState extends State<Calendar> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> _showMyDialog() async {
+    TextEditingController remainderMessage = TextEditingController();
+    double scrWidth = MediaQuery.of(context).size.width;
+    double scrHeight = MediaQuery.of(context).size.height;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        var buttonStyle = ElevatedButton.styleFrom(
+          backgroundColor: appColors.scoreCardText,
+        );
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              'Add Remainder',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: appColors.scoreCardText,
+              ),
+            ),
+          ),
+          content: AddRemainder(
+            remainderMessage: remainderMessage,
+          ),
+          actionsPadding: EdgeInsets.only(
+            right: scrWidth * 0.07,
+            bottom: scrHeight * 0.025,
+          ),
+          actions: [
+            ElevatedButton(
+              style: buttonStyle,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: appColors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: buttonStyle,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Add',
+                style: TextStyle(
+                  color: appColors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

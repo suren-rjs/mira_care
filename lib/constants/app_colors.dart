@@ -14,6 +14,7 @@ class _AppColors {
   final Color white30 = const Color(0xBAFFFFFF);
   final Color black = const Color(0xFF000000);
   final Color scoreCardText = const Color(0xFF1D3E7D);
+  final Color scoreCardText75 = const Color(0xBF1D3E7D);
   final Color eventNote = const Color(0xFF001640);
   final Color textGray = const Color(0xFF949494);
   final Color msgTextGray = const Color(0xFF717171);
@@ -36,4 +37,6 @@ class _AppColors {
   final Color calendarAnc50 = const Color(0x7453C5EA);
   final Color calendarAnc = const Color(0xFF53C5EA);
   final Color weekend = const Color(0xFFFF7A7A);
+  final Color timeColor = const Color(0xFF5BADED);
+  final Color dropDownText = const Color(0xFF646464);
 }
