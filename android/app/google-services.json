@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "1025342973015",
+    "project_id": "health-care-hc",
+    "storage_bucket": "health-care-hc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025342973015:android:0cb189271aaabd0c1bef12",
+        "android_client_info": {
+          "package_name": "com.bt.health_care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025342973015-nvui60lq4k8mef0eec27jj54o4jsvmdh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAg4zwZAViLNbyjOMUl6Yq42HJRakwVY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025342973015-nvui60lq4k8mef0eec27jj54o4jsvmdh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1025342973015-etn26m3rc5gbjhhsj5i3fk2dfqev6ukr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.burhanitech.miraCare"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025342973015:android:de97f38313ce32d61bef12",
+        "android_client_info": {
+          "package_name": "com.burhani_tech.mira_care"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1025342973015-nvui60lq4k8mef0eec27jj54o4jsvmdh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAg4zwZAViLNbyjOMUl6Yq42HJRakwVY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1025342973015-nvui60lq4k8mef0eec27jj54o4jsvmdh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1025342973015-etn26m3rc5gbjhhsj5i3fk2dfqev6ukr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.burhanitech.miraCare"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

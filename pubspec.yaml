@@ -19,6 +19,8 @@ dependencies:
   simple_gesture_detector: ^0.2.0
   day_night_time_picker: ^1.2.0+2
   dropdown_button2: ^2.0.0
+  firebase_core: ^2.9.0
+  cloud_firestore: ^4.5.0
 
 dev_dependencies:
   flutter_test:
