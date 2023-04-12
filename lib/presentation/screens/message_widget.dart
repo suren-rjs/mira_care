@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
 import 'package:mira_care/resources/data/model/journal_note.dart';
+import 'package:mira_care/resources/service/storage_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -27,6 +28,8 @@ class ReceivedMessage extends StatefulWidget {
 class _ReceivedMessageState extends State<ReceivedMessage> {
   late Note note;
   late Future<File?> _bar;
+  bool isVideo = false;
+  String iconPreview = 'img';
 
   @override
   void initState() {
@@ -35,17 +38,16 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
   }
 
   Future<File?> getMultimediaPreview(String fileUri) async {
-    File? file;
+    File? file = await storageService.getFile(fileUri);
     String extension = p.extension(fileUri);
     String name = p.extension(fileUri, 2).split('.')[0];
-    debugPrint(extension);
     if (extension == '.mp4') {
+      isVideo = true;
       Uint8List? image = await VideoThumbnail.thumbnailData(
         video: fileUri,
-        imageFormat: ImageFormat.JPEG,
-        maxWidth: 100,
-        maxHeight: 100,
-        quality: 25,
+        imageFormat: ImageFormat.PNG,
+        maxWidth: 120,
+        maxHeight: 120,
       );
 
       if (image != null) {
@@ -61,6 +63,12 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
       '.png',
     ].contains(extension)) {
       file = File(fileUri);
+    } else if (['.doc', '.docx'].contains(extension)) {
+      iconPreview = 'document';
+    } else if (['.pdf'].contains(extension)) {
+      iconPreview = 'pdf';
+    } else {
+      iconPreview = 'music';
     }
     return file;
   }
@@ -88,7 +96,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
     if (fileUri != null) {
       _bar = getMultimediaPreview(fileUri);
     }
-    double multiMediaHeight = fileUri != null ? scrHeight * 0.15 : 0;
+    double multiMediaHeight = fileUri != null ? scrHeight * 0.125 : 0;
     return Container(
       margin: EdgeInsets.symmetric(vertical: scrHeight * 0.005),
       width: scrHeight * 0.4,
@@ -124,7 +132,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
             left: scrWidth * 0.15,
             child: note.isMultimediaMsg
                 ? Container(
-                    decoration: BoxDecoration(
+              decoration: BoxDecoration(
                       color: appColors.messageGray,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
@@ -133,45 +141,84 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                       ),
                     ),
                     width: scrWidth * 0.69,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.zero,
-                            width: scrWidth * 0.25,
-                            height: scrHeight * 0.15,
-                            child: FutureBuilder<File?>(
-                              future: _bar,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<File?> snapshot) {
-                                if (snapshot.hasData) {
-                                  return Image.file(
-                                    snapshot.data!,
-                                    fit: BoxFit.contain,
-                                  );
-                                } else {
-                                  return Image.asset(
-                                    'assets/images/img_preview.png',
-                                    fit: BoxFit.contain,
-                                  );
-                                }
-                              },
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: scrHeight * 0.01,
+                          left: scrWidth * 0.025,
+                          child: Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.zero,
+                                width: scrWidth * 0.25,
+                                height: scrHeight * 0.125,
+                                child: FutureBuilder<File?>(
+                                  future: _bar,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<File?> snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Image.file(
+                                        snapshot.data!,
+                                        fit: BoxFit.contain,
+                                      );
+                                    } else {
+                                      return Image.asset(
+                                        'assets/images/${iconPreview}_preview.png',
+                                        fit: BoxFit.contain,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                              isVideo
+                                  ? Positioned(
+                                      top: scrHeight * 0.05,
+                                      left: scrWidth * 0.1,
+                                      width: scrHeight * 0.025,
+                                      child: Container(
+                                        padding: EdgeInsets.zero,
+                                        decoration: BoxDecoration(
+                                          color: appColors.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(5),
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.play_arrow_rounded,
+                                          size: 14 * fontScaleFactor,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: scrHeight * 0.14,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: appColors.messageGray,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                            width: scrWidth * 0.69,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Text(
+                                note.content ?? '',
+                                style: TextStyle(
+                                  fontSize: 14 * fontScaleFactor,
+                                  color: appColors.black,
+                                  height: 1.5,
+                                ),
+                              ),
                             ),
                           ),
-                          SizedBox(height: scrHeight * 0.01),
-                          Text(
-                            note.content ?? '',
-                            style: TextStyle(
-                              fontSize: 14 * fontScaleFactor,
-                              color: appColors.black,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   )
                 : Container(

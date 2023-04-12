@@ -26,7 +26,7 @@ class _NoteListState extends State<NoteList> {
     await Future.delayed(const Duration(milliseconds: 500));
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: const Duration(microseconds: 500),
+      duration: const Duration(microseconds: 50),
       curve: Curves.easeInOut,
     );
   }

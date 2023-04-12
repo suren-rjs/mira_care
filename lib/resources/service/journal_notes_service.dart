@@ -12,7 +12,7 @@ class JournalNotesService {
 
   Future<List<Note>> get() async {
     List<Note>? list = [];
-    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _tasks.orderBy("dateTime", descending: false).limit(10).get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _tasks.orderBy("dateTime", descending: false).get();
     list = querySnapshot.docs
         .map((e) => Note.fromMap(e.data(), e.id))
         .cast<Note>()

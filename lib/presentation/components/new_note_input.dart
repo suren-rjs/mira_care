@@ -11,6 +11,7 @@ import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/resources/controller/notes_controller.dart';
 import 'package:mira_care/resources/data/model/journal_note.dart';
 import 'package:mira_care/resources/helper/file_selector.dart';
+import 'package:mira_care/resources/service/storage_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -29,6 +30,7 @@ class _NewNoteInputState extends State<NewNoteInput> {
   List<File> localFiles = [];
   List<FileThumbArt> thumbArt = [];
   List<String> pathList = [];
+  List<String> uploadedUrl = [];
   List<String> avatarUri = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPprK2UpcWM6d34sFN4LZARi59deYcjy2QuIVpydrTMg5HGpzDLfm5vngiqr0z4sz3B8U&usqp=CAU',
     'https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg',
@@ -95,6 +97,7 @@ class _NewNoteInputState extends State<NewNoteInput> {
     localFiles.clear();
     thumbArt.clear();
     pathList.clear();
+    uploadedUrl.clear();
   }
 
   @override
@@ -189,12 +192,20 @@ class _NewNoteInputState extends State<NewNoteInput> {
                       ),
                       InkWell(
                         onTap: () async {
+                          if (localFiles.isNotEmpty) {
+                            uploadedUrl.clear();
+                            for (var file in localFiles) {
+                              uploadedUrl.add(
+                                await storageService.fileUpload(file.path),
+                              );
+                            }
+                          }
                           await controller.newJournalNote(Note(
                             avatarImage:
                                 avatarUri[Random().nextInt(avatarUri.length)],
                             dateTime: DateTime.now(),
                             content: noteMessage.text,
-                            multiMedia: pathList,
+                            multiMedia: uploadedUrl,
                           ));
                           noteMessage.clear();
                           clearFiles();
