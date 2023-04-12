@@ -154,6 +154,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                                   );
                                 } else {
                                   return Image.asset(
+                                    'assets/images/img_preview.png',
                                     fit: BoxFit.contain,
                                   );
                                 }

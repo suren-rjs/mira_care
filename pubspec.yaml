@@ -61,6 +61,7 @@ flutter:
     - assets/images/document_preview.png
     - assets/images/music_preview.png
     - assets/images/pdf_preview.png
+    - assets/images/img_preview.png
     # Calendar Images
     - assets/images/calendar_img.png
     - assets/images/search_img.png
