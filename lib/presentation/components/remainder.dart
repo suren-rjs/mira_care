@@ -105,16 +105,32 @@ class Remainder extends StatelessWidget {
             ),
           ),
           SizedBox(width: scrWidth * 0.05),
-          SizedBox(
-            width: scrWidth * 0.65,
-            child: Center(
-              child: Text(
-                '${remainder.message}',
-                style: TextStyle(
-                  fontSize: 14 * fontScaleFactor,
+          Column(
+            children: [
+              SizedBox(
+                width: scrWidth * 0.65,
+                child: Text(
+                  '${remainder.category}',
+                  style: TextStyle(
+                    fontSize: 14 * fontScaleFactor,
+                    overflow: TextOverflow.ellipsis,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
                 ),
               ),
-            ),
+              SizedBox(
+                width: scrWidth * 0.65,
+                child: Text(
+                  '${remainder.message}',
+                  style: TextStyle(
+                    fontSize: 14 * fontScaleFactor,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 3,
+                ),
+              ),
+            ],
           )
         ],
       ),
