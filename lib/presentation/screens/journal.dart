@@ -181,6 +181,9 @@ class _JournalState extends State<Journal> {
           ),
           content: AddRemainder(
             remainderMessage: remainderMessage,
+            currentDateTime: TextEditingController(),
+            selectedDateTime: TextEditingController(),
+            selectedCategory: TextEditingController(),
           ),
           actionsPadding: EdgeInsets.only(
             right: scrWidth * 0.07,

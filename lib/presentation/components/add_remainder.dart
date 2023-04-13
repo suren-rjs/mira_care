@@ -7,9 +7,15 @@ class AddRemainder extends StatefulWidget {
   const AddRemainder({
     super.key,
     required this.remainderMessage,
+    required this.currentDateTime,
+    required this.selectedDateTime,
+    required this.selectedCategory,
   });
 
   final TextEditingController remainderMessage;
+  final TextEditingController currentDateTime;
+  final TextEditingController selectedDateTime;
+  final TextEditingController selectedCategory;
 
   @override
   State<StatefulWidget> createState() => _AddRemainderState();
@@ -40,6 +46,8 @@ class _AddRemainderState extends State<AddRemainder> {
   }
 
   void onTimeChanged(Time newTime) {
+    widget.selectedDateTime.text =
+        '${widget.currentDateTime.text}${newTime.hour < 10 ? '0${newTime.hour}' : newTime.hour}:${newTime.minute < 10 ? '0${newTime.minute}' : newTime.minute}';
     setState(() {
       time = newTime;
     });
@@ -47,8 +55,11 @@ class _AddRemainderState extends State<AddRemainder> {
 
   @override
   Widget build(BuildContext context) {
+    int hour = time.hour == 12 || time.hour == 24 ? 12 : (time.hour % 12);
+    int minute = time.minute;
+    bool isAm = time.hour < 12;
     String timeText =
-        '${time.hour < 10 ? '0${time.hour}' : time.hour} : ${time.minute < 10 ? '0${time.minute}' : time.minute}';
+        '${hour < 10 ? '0$hour' : hour}:${minute < 10 ? '0$minute' : minute} ${isAm ? " AM" : "PM"}';
 
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
@@ -119,6 +130,7 @@ class _AddRemainderState extends State<AddRemainder> {
                   onChanged: (value) {
                     setState(() {
                       selectedValue = value as String;
+                      widget.selectedCategory.text = value;
                     });
                   },
                   buttonStyleData: ButtonStyleData(
@@ -223,9 +235,9 @@ class _AddRemainderState extends State<AddRemainder> {
                           width: scrWidth * 0.025,
                         ),
                         Text(
-                          timeText,
+                          '${widget.currentDateTime.text}$timeText',
                           style: TextStyle(
-                            fontSize: 28 * fontScaleFactor,
+                            fontSize: 14 * fontScaleFactor,
                             fontWeight: FontWeight.bold,
                             color: appColors.dropDownText,
                           ),

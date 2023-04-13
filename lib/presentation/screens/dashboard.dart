@@ -5,6 +5,7 @@ import 'package:mira_care/presentation/components/care_recipient_profile_card.da
 import 'package:mira_care/presentation/components/health_score_card.dart';
 import 'package:mira_care/presentation/components/remainder.dart';
 import 'package:mira_care/presentation/components/sleep_card.dart';
+import 'package:mira_care/resources/controller/remainder_controller.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 
 class Dashboard extends StatelessWidget {
@@ -18,6 +19,8 @@ class Dashboard extends StatelessWidget {
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     ViewController viewController = Get.put(ViewController());
+    RemainderController remController = Get.put(RemainderController());
+    remController.getRemainder();
 
     double reminderHeight = scrHeight * 0.11;
     return Column(
@@ -146,28 +149,25 @@ class Dashboard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: scrHeight * 0.02),
-                Container(
-                  padding: EdgeInsets.zero,
-                  width: scrWidth,
-                  height: (reminderHeight) * 3,
-                  child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 3,
-                    padding: EdgeInsets.all(scrHeight * 0.005),
-                    itemBuilder: (context, index) {
-                      var remColors = [
-                        appColors.remCol1,
-                        appColors.remCol2,
-                        appColors.remCol3,
-                      ];
-                      var remainderText =
-                          'Doctor sha appointment at 4.00PM assigned to monica';
-                      return Remainder(
-                        remColors: remColors,
-                        remainderText: remainderText,
-                      );
-                    },
-                  ),
+                GetBuilder<RemainderController>(
+                  init: remController,
+                  builder: (remainderController) {
+                    return Container(
+                      padding: EdgeInsets.zero,
+                      width: scrWidth,
+                      height: (reminderHeight) * remainderController.length,
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: remainderController.length,
+                        padding: EdgeInsets.all(scrHeight * 0.005),
+                        itemBuilder: (context, index) {
+                          return Remainder(
+                            remainder: remainderController.remainder[index],
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: scrHeight * 0.03),
               ],
