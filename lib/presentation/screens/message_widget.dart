@@ -62,7 +62,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
       '.WebP',
       '.png',
     ].contains(extension)) {
-      file = File(fileUri);
+      iconPreview = 'img';
     } else if (['.doc', '.docx'].contains(extension)) {
       iconPreview = 'document';
     } else if (['.pdf'].contains(extension)) {
@@ -70,6 +70,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
     } else {
       iconPreview = 'music';
     }
+    debugPrint('Icon : $iconPreview');
     return file;
   }
 
@@ -132,7 +133,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
             left: scrWidth * 0.15,
             child: note.isMultimediaMsg
                 ? Container(
-              decoration: BoxDecoration(
+                    decoration: BoxDecoration(
                       color: appColors.messageGray,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10),
@@ -156,7 +157,8 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                                   future: _bar,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<File?> snapshot) {
-                                    if (snapshot.hasData) {
+                                    if (snapshot.hasData &&
+                                        iconPreview == 'img') {
                                       return Image.file(
                                         snapshot.data!,
                                         fit: BoxFit.contain,

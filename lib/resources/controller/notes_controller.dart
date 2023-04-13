@@ -22,16 +22,17 @@ class NotesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _journalNotes = [];
+    _journalNotes.clear();
     getJournalNotes();
   }
 
   getJournalNotes() async {
+    _journalNotes.clear();
     await journalNotesService.get().then((value) {
       _journalNotes = value;
       update();
     }).onError((error, stackTrace) {
-      _journalNotes = [];
+      _journalNotes.clear();
       update();
     });
   }

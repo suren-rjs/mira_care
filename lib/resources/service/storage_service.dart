@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
-
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 // ignore: library_private_types_in_public_api
@@ -20,15 +20,14 @@ class _StorageService {
   Future<String> fileUpload(filePath) async {
     String extension = p.extension(filePath);
     final file = File(filePath);
-    String name = const Uuid().v4();
+    String name = '${const Uuid().v4()}$extension';
 
     String contentType = lookupMimeType(file.path) ?? '';
     final metadata = SettableMetadata(contentType: contentType);
 
     final storageRef = FirebaseStorage.instance.ref();
 
-    final uploadTask =
-        storageRef.child("files/$name$extension").putFile(file, metadata);
+    final uploadTask = storageRef.child("files/$name").putFile(file, metadata);
 
     uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
       switch (taskSnapshot.state) {
@@ -58,12 +57,15 @@ class _StorageService {
         .ref()
         .child('files/$name')
         .getDownloadURL();
-
+    debugPrint('Url = $fileUrl');
     var response = await http.get(Uri.parse(fileUrl));
-
-    File file = File('/files/');
-    file.writeAsBytesSync(response.bodyBytes);
-    debugPrint('downloaded');
+    final tempDir = await getTemporaryDirectory();
+    File file = await File('${tempDir.path}/$name').create();
+    if (response.statusCode == 200) {
+      Uint8List imageInUnit8List = response.bodyBytes;
+      file.writeAsBytesSync(imageInUnit8List);
+      debugPrint('downloaded');
+    }
     return file;
   }
 }
