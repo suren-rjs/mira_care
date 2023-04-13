@@ -70,7 +70,6 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
     } else {
       iconPreview = 'music';
     }
-    debugPrint('Icon : $iconPreview');
     return file;
   }
 

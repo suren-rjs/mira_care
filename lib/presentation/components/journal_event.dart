@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
+import 'package:mira_care/resources/data/model/event.dart';
 
-class JournalEvent extends StatelessWidget {
-  const JournalEvent({
+class JournalEventWidget extends StatelessWidget {
+  const JournalEventWidget({
     super.key,
+    required this.journalEvent,
   });
+
+  final JournalEvent journalEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class JournalEvent extends StatelessWidget {
                 SizedBox(height: (eventHeight) * 0.1),
                 Center(
                   child: Text(
-                    '20',
+                    DateFormat('dd').format(journalEvent.dateTime!),
                     style: TextStyle(
                       color: appColors.white,
                       fontSize: 22 * fontScaleFactor,
@@ -42,7 +47,7 @@ class JournalEvent extends StatelessWidget {
                 SizedBox(height: (eventHeight) * 0.02),
                 Center(
                   child: Text(
-                    'Feb',
+                    DateFormat('MMM').format(journalEvent.dateTime!),
                     style: TextStyle(
                       color: appColors.white,
                       fontSize: 10 * fontScaleFactor,
@@ -53,7 +58,7 @@ class JournalEvent extends StatelessWidget {
                 SizedBox(height: (eventHeight) * 0.02),
                 Center(
                   child: Text(
-                    '2 AM',
+                    DateFormat('hh:mm a').format(journalEvent.dateTime!),
                     style: TextStyle(
                       color: appColors.white,
                       fontSize: 14 * fontScaleFactor,
@@ -73,29 +78,27 @@ class JournalEvent extends StatelessWidget {
           SizedBox(width: scrWidth * 0.05),
           SizedBox(
             width: scrWidth * 0.5,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Meals',
-                    style: TextStyle(
-                      color: appColors.white,
-                      fontSize: 16 * fontScaleFactor,
-                    ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${journalEvent.category}',
+                  style: TextStyle(
+                    color: appColors.white,
+                    fontSize: 16 * fontScaleFactor,
                   ),
-                  Text(
-                    'Restless sleep - appears to be related to breath',
-                    style: TextStyle(
-                      color: appColors.white,
-                      fontSize: 12 * fontScaleFactor,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    maxLines: 2,
+                ),
+                Text(
+                  '${journalEvent.message}',
+                  style: TextStyle(
+                    color: appColors.white,
+                    fontSize: 12 * fontScaleFactor,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                  maxLines: 2,
+                ),
+              ],
             ),
           )
         ],

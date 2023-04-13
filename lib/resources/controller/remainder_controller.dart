@@ -34,9 +34,6 @@ class RemainderController extends GetxController {
     _calendarRemainder.clear();
     await remainderService.get(dateTime).then((value) {
       _calendarRemainder = value;
-      for (var element in _calendarRemainder) {
-        debugPrint(element.message);
-      }
       update();
     }).onError((error, stackTrace) {
       _calendarRemainder.clear();

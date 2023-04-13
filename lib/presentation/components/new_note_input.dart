@@ -160,7 +160,7 @@ class _NewNoteInputState extends State<NewNoteInput> {
                         height: scrWidth * 0.125,
                         width: scrWidth * 0.5,
                         padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.02,
+                          horizontal: scrWidth * 0.01,
                         ),
                         decoration: BoxDecoration(
                           color: appColors.white,

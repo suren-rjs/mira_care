@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/add_remainder.dart';
 import 'package:mira_care/presentation/components/journal_event_list.dart';
 import 'package:mira_care/presentation/components/new_note_input.dart';
 import 'package:mira_care/presentation/components/note_list.dart';
+import 'package:mira_care/resources/controller/event_controller.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
+import 'package:mira_care/resources/data/model/event.dart';
 
 class Journal extends StatefulWidget {
   const Journal({
@@ -159,6 +162,10 @@ class _JournalState extends State<Journal> {
 
   Future<void> _showMyDialog() async {
     TextEditingController remainderMessage = TextEditingController();
+    TextEditingController currentDateTime = TextEditingController(
+        text: DateFormat('dd-MM-yyyy ').format(DateTime.now()));
+    TextEditingController selectedDateTime = TextEditingController();
+    TextEditingController selectedCategory = TextEditingController();
     double scrWidth = MediaQuery.of(context).size.width;
     double scrHeight = MediaQuery.of(context).size.height;
     return showDialog<void>(
@@ -168,55 +175,70 @@ class _JournalState extends State<Journal> {
         var buttonStyle = ElevatedButton.styleFrom(
           backgroundColor: appColors.scoreCardText,
         );
-        return AlertDialog(
-          title: Center(
-            child: Text(
-              'Add Event',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: appColors.scoreCardText,
-              ),
-            ),
-          ),
-          content: AddRemainder(
-            remainderMessage: remainderMessage,
-            currentDateTime: TextEditingController(),
-            selectedDateTime: TextEditingController(),
-            selectedCategory: TextEditingController(),
-          ),
-          actionsPadding: EdgeInsets.only(
-            right: scrWidth * 0.07,
-            bottom: scrHeight * 0.025,
-          ),
-          actions: [
-            ElevatedButton(
-              style: buttonStyle,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: appColors.white,
-                  fontSize: 18,
+        return GetBuilder<EventController>(
+          init: Get.put(EventController()),
+          builder: (eventController) {
+            return AlertDialog(
+              title: Center(
+                child: Text(
+                  'Add Event',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: appColors.scoreCardText,
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              style: buttonStyle,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Add',
-                style: TextStyle(
-                  color: appColors.white,
-                  fontSize: 18,
-                ),
+              content: AddRemainder(
+                remainderMessage: remainderMessage,
+                currentDateTime: currentDateTime,
+                selectedDateTime: selectedDateTime,
+                selectedCategory: selectedCategory,
+                isEvent: true,
               ),
-            ),
-          ],
+              actionsPadding: EdgeInsets.only(
+                right: scrWidth * 0.07,
+                bottom: scrHeight * 0.02,
+              ),
+              actions: [
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: appColors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    DateFormat format = DateFormat('dd-MM-yyyy HH:mm');
+                    DateTime dateTime = format.parse(selectedDateTime.text);
+                    eventController.newEvent(
+                      JournalEvent(
+                        category: selectedCategory.text,
+                        dateTime: dateTime,
+                        message: remainderMessage.text,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Add',
+                    style: TextStyle(
+                      color: appColors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );

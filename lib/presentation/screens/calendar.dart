@@ -42,7 +42,11 @@ class _CalendarState extends State<Calendar> {
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     RemainderController remController = Get.put(RemainderController());
-    remController.getRemainder();
+    remController.getTodayRemainders(DateTime(
+      currentDay.year,
+      currentDay.month,
+      currentDay.day,
+    ));
 
     return GetBuilder<ViewController>(
       init: viewController,
@@ -99,32 +103,35 @@ class _CalendarState extends State<Calendar> {
                 Positioned(
                   top: scrHeight * 0.02,
                   right: scrWidth * 0.05,
-                  child: InkWell(
-                    onTap: () {
-                      _showMyDialog(DateTime(
-                        currentDay.year,
-                        currentDay.month,
-                        currentDay.day,
-                      ));
-                    },
-                    child: Container(
-                      height: scrHeight * 0.065,
-                      width: scrHeight * 0.065,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(55),
-                        color: appColors.scoreCardText,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.add,
-                          size: 30 * fontScaleFactor,
-                          weight: 18 * fontScaleFactor,
-                          color: appColors.white,
-                          opticalSize: 30 * fontScaleFactor,
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: currentDay.isAfter(
+                          DateTime.now().subtract(const Duration(days: 1)))
+                      ? InkWell(
+                          onTap: () {
+                            _showMyDialog(DateTime(
+                              currentDay.year,
+                              currentDay.month,
+                              currentDay.day,
+                            ));
+                          },
+                          child: Container(
+                            height: scrHeight * 0.065,
+                            width: scrHeight * 0.065,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(55),
+                              color: appColors.scoreCardText,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.add,
+                                size: 30 * fontScaleFactor,
+                                weight: 18 * fontScaleFactor,
+                                color: appColors.white,
+                                opticalSize: 30 * fontScaleFactor,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Container(),
                 ),
                 Positioned(
                   top: scrHeight * 0.08,
@@ -153,7 +160,7 @@ class _CalendarState extends State<Calendar> {
                               currentDay.month,
                               currentDay.day,
                             ));
-                            // setState(() {});
+                            setState(() {});
                           },
                           calendarStyle: CalendarStyle(
                             selectedDecoration: todayDecoration,
@@ -236,6 +243,7 @@ class _CalendarState extends State<Calendar> {
                 currentDateTime: currentDateTime,
                 selectedDateTime: selectedDateTime,
                 selectedCategory: selectedCategory,
+                isEvent: false,
               ),
               actionsPadding: EdgeInsets.only(
                 right: scrWidth * 0.07,

@@ -10,7 +10,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   get: ^4.6.5
-  intl: ^0.18.0
+  intl: ^0.17.0
   intervalprogressbar: ^2.0.1
   google_fonts: ^4.0.3
   file_picker: ^5.2.7
@@ -24,6 +24,7 @@ dependencies:
   firebase_storage: ^11.1.0
   mime: ^1.0.4
   uuid: ^3.0.7
+  flutter_holo_date_picker: ^1.1.0
 
 dev_dependencies:
   flutter_test:

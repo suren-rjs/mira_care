@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 
 class AddRemainder extends StatefulWidget {
@@ -10,12 +14,14 @@ class AddRemainder extends StatefulWidget {
     required this.currentDateTime,
     required this.selectedDateTime,
     required this.selectedCategory,
+    required this.isEvent,
   });
 
   final TextEditingController remainderMessage;
   final TextEditingController currentDateTime;
   final TextEditingController selectedDateTime;
   final TextEditingController selectedCategory;
+  final bool isEvent;
 
   @override
   State<StatefulWidget> createState() => _AddRemainderState();
@@ -47,7 +53,7 @@ class _AddRemainderState extends State<AddRemainder> {
 
   void onTimeChanged(Time newTime) {
     widget.selectedDateTime.text =
-        '${widget.currentDateTime.text}${newTime.hour < 10 ? '0${newTime.hour}' : newTime.hour}:${newTime.minute < 10 ? '0${newTime.minute}' : newTime.minute}';
+    '${widget.currentDateTime.text}${newTime.hour < 10 ? '0${newTime.hour}' : newTime.hour}:${newTime.minute < 10 ? '0${newTime.minute}' : newTime.minute}';
     setState(() {
       time = newTime;
     });
@@ -88,7 +94,7 @@ class _AddRemainderState extends State<AddRemainder> {
                 enabledBorder: inputBorder,
                 focusedBorder: inputBorder,
                 errorBorder: inputBorder,
-                hintText: 'Remainder Message',
+                hintText: '${widget.isEvent ? "Event" : "Remainder"} Message',
               ),
             ),
           ),
@@ -115,16 +121,16 @@ class _AddRemainderState extends State<AddRemainder> {
                   ),
                   items: items
                       .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: TextStyle(
-                                fontSize: 14 * fontScaleFactor,
-                                color: appColors.black,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
+                    value: item,
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        fontSize: 14 * fontScaleFactor,
+                        color: appColors.black,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
                       .toList(),
                   value: selectedValue,
                   onChanged: (value) {
@@ -204,7 +210,27 @@ class _AddRemainderState extends State<AddRemainder> {
                 color: appColors.white,
                 child: Center(
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      if (widget.isEvent) {
+                        var datePicked = await DatePicker.showSimpleDatePicker(
+                          context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now()
+                              .subtract(const Duration(days: 365)),
+                          lastDate: DateTime.now()
+                              .add(const Duration(days: (365 * 2))),
+                          dateFormat: "dd-MM-yyyy",
+                          locale: DateTimePickerLocale.en_us,
+                          looping: true,
+                        );
+                        if (datePicked != null) {
+                          DateTime selectedDate =
+                              DateTime.parse(datePicked.toString());
+                          widget.currentDateTime.text =
+                              DateFormat('dd-MM-yyyy ').format(selectedDate);
+                        }
+                      }
+                      onTimeChanged(time);
                       Navigator.of(context).push(
                         showPicker(
                           context: context,
@@ -217,10 +243,10 @@ class _AddRemainderState extends State<AddRemainder> {
                               minute: dateTime.minute,
                               second: 00,
                             );
-                            setState(() {});
                           },
                         ),
                       );
+                      setState(() {});
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

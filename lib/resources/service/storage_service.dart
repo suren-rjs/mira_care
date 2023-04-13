@@ -57,7 +57,6 @@ class _StorageService {
         .ref()
         .child('files/$name')
         .getDownloadURL();
-    debugPrint('Url = $fileUrl');
     var response = await http.get(Uri.parse(fileUrl));
     final tempDir = await getTemporaryDirectory();
     File file = await File('${tempDir.path}/$name').create();
