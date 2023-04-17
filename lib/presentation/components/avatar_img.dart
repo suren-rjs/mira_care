@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mira_care/constants/app_colors.dart';
 
 class AvatarImage extends StatelessWidget {
   const AvatarImage({
@@ -12,7 +13,16 @@ class AvatarImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: 50.0,
-      backgroundImage: NetworkImage(url, scale: 0.1),
+      backgroundImage: Image.network(
+        url,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/images/img_error_contact.png',
+            fit: BoxFit.contain,
+          );
+        },
+      ).image,
+      backgroundColor: appColors.weekDayBackground,
     );
   }
 }

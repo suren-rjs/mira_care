@@ -32,7 +32,13 @@ class CustomAppBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  AvatarImage(url: url),
+                  SizedBox(width: scrWidth * 0.075),
+                  SizedBox(
+                    width: scrWidth * 0.1,
+                    height: scrHeight * 0.1,
+                    child: AvatarImage(url: url),
+                  ),
+                  SizedBox(width: scrWidth * 0.07),
                   SizedBox(
                     width: scrWidth * 0.25,
                     height: scrHeight * 0.1,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mira_care/resources/init_controllers.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'firebase_options.dart';
 
 import 'constants/app_colors.dart';
@@ -18,6 +19,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  await Permission.contacts.request();
   runApp(const MyApp());
 }
 

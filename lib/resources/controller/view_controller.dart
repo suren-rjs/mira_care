@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/presentation/screens/calendar.dart';
 import 'package:mira_care/presentation/screens/care_recipient_profile.dart';
+import 'package:mira_care/presentation/screens/community.dart';
+import 'package:mira_care/presentation/screens/contacts.dart';
 import 'package:mira_care/presentation/screens/dashboard.dart';
 import 'package:mira_care/presentation/screens/journal.dart';
 import 'package:mira_care/presentation/screens/sleep_page.dart';
@@ -42,6 +44,12 @@ class ViewController extends GetxController {
         break;
       case 3:
         currentScreen = const Calendar();
+        break;
+      case 4:
+        currentScreen = const Community();
+        break;
+      case 6:
+        currentScreen = const Contacts();
         break;
     }
     update();

@@ -106,7 +106,7 @@ class _OverlayPanelState extends State<OverlayPanel> {
                       MenuItem(
                         iconUri: 'assets/images/community.png',
                         name: 'Community',
-                        function: () {},
+                        function: () => controller.changeScreenView(4),
                       ),
                       MenuItem(
                         iconUri: 'assets/images/message.png',
@@ -116,7 +116,7 @@ class _OverlayPanelState extends State<OverlayPanel> {
                       MenuItem(
                         iconUri: 'assets/images/contact.png',
                         name: 'Contacts',
-                        function: () {},
+                        function: () => controller.changeScreenView(6),
                       ),
                       MenuItem(
                         iconUri: 'assets/images/reporting.png',

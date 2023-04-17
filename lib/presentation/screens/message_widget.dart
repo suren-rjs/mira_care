@@ -27,7 +27,7 @@ class ReceivedMessage extends StatefulWidget {
 
 class _ReceivedMessageState extends State<ReceivedMessage> {
   late Note note;
-  late Future<File?> _bar;
+  late Future<File?> _fileLoader;
   bool isVideo = false;
   String iconPreview = 'img';
 
@@ -94,7 +94,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
     double messageHeight = (scrHeight * note.factor) * note.contentHeightFactor;
     String? fileUri = note.isMultimediaMsg ? note.multiMedia?.first : null;
     if (fileUri != null) {
-      _bar = getMultimediaPreview(fileUri);
+      _fileLoader = getMultimediaPreview(fileUri);
     }
     double multiMediaHeight = fileUri != null ? scrHeight * 0.125 : 0;
     return Container(
@@ -153,7 +153,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                                 width: scrWidth * 0.25,
                                 height: scrHeight * 0.125,
                                 child: FutureBuilder<File?>(
-                                  future: _bar,
+                                  future: _fileLoader,
                                   builder: (BuildContext context,
                                       AsyncSnapshot<File?> snapshot) {
                                     if (snapshot.hasData &&
