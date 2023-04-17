@@ -171,11 +171,13 @@ class CellContent extends StatelessWidget {
             alignment: alignment,
             child: Text(
               text,
-              style: isEventDay
+              style: isEventDay && !isWeekend
                   ? calendarStyle.eventDayStyle
-                  : isWeekend
-                      ? calendarStyle.weekendTextStyle
-                      : calendarStyle.defaultTextStyle,
+                  : isEventDay && isWeekend
+                      ? calendarStyle.weekendBoldTextStyle
+                      : isWeekend
+                          ? calendarStyle.weekendTextStyle
+                          : calendarStyle.defaultTextStyle,
             ),
           );
     }
