@@ -23,6 +23,7 @@ class CommunityContact extends StatelessWidget {
 
     return Container(
       height: commCardHeight,
+      width: scrWidth,
       margin: EdgeInsets.all(scrWidth * 0.025),
       decoration: BoxDecoration(
         color: appColors.white,
@@ -46,7 +47,7 @@ class CommunityContact extends StatelessWidget {
           ),
           SizedBox(width: commCardHeight * 0.2),
           Container(
-            width: scrWidth * 0.4,
+            width: scrWidth * (scrHeight < 750 ? 0.4 : 0.25),
             padding: EdgeInsets.symmetric(vertical: commCardHeight * 0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

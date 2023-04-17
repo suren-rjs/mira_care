@@ -19,8 +19,6 @@ class RemainderController extends GetxController {
   }
 
   Future<void> getMonthDates(int month) async {
-    eventDates.clear();
-
     DateTime now = DateTime.now();
     DateTime monthStartDate = DateTime(now.year, month, 1);
     DateTime monthEndDate = DateTime(now.year, month + 1, 0);

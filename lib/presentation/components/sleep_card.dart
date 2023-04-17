@@ -31,9 +31,9 @@ class SleepCard extends StatelessWidget {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
-    double cardHeight = scrHeight * 0.2;
     double cardWidth = scrWidth * 0.9;
     double progressWidth = cardWidth * 0.9;
+    double cardHeight = scrHeight * (scrHeight < 750 ? 0.2 : 0.168);
     return InkWell(
       onTap: function,
       child: Container(

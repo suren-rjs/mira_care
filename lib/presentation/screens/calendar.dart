@@ -136,7 +136,7 @@ class _CalendarState extends State<Calendar> {
                 Positioned(
                   top: scrHeight * 0.07,
                   left: scrWidth * 0.05,
-                  right: scrHeight * 0.07,
+                  right: scrHeight * 0.05,
                   bottom: 0,
                   child: SizedBox(
                     height: scrHeight * 0.8,
@@ -195,7 +195,8 @@ class _CalendarState extends State<Calendar> {
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   itemCount: remainderController.length,
-                                  padding: EdgeInsets.all(scrHeight * 0.005),
+                                  padding: EdgeInsets.all(scrHeight *
+                                      (scrHeight < 750 ? 0.005 : 0)),
                                   itemBuilder: (context, index) {
                                     return Remainder(
                                       remainder:

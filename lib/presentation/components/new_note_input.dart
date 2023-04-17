@@ -75,7 +75,7 @@ class _NewNoteInputState extends State<NewNoteInput> {
             Uint8List imageInUnit8List = image;
             final tempDir = await getTemporaryDirectory();
             File generatedImage =
-            await File('${tempDir.path}/$name.png').create();
+                await File('${tempDir.path}/$name.png').create();
             generatedImage.writeAsBytesSync(imageInUnit8List);
             thumbArt.add(FileThumbArt(generatedImage, 'video', name));
           }

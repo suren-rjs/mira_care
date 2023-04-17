@@ -140,25 +140,24 @@ class _ContactsState extends State<Contacts> {
                   ],
                 ),
               ),
-              FutureBuilder<List<UserContact>?>(
-                future: _contactLoader,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<UserContact>?> snapshot) {
-                  if (snapshot.hasData) {
-                    debugPrint('${snapshot.data}');
-                    return Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            appColors.white,
-                            appColors.transparent,
-                          ],
-                        ),
-                      ),
-                      height: scrHeight * 0.675,
-                      child: ListView.builder(
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      appColors.white,
+                      appColors.transparent,
+                    ],
+                  ),
+                ),
+                height: scrHeight * 0.675,
+                child: FutureBuilder<List<UserContact>?>(
+                  future: _contactLoader,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<UserContact>?> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.vertical,
                         itemCount: contactList.length,
@@ -168,12 +167,12 @@ class _ContactsState extends State<Contacts> {
                             isContacts: true,
                           );
                         },
-                      ),
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ],
           ),
