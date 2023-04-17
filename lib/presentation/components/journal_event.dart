@@ -23,7 +23,7 @@ class JournalEventWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: scrHeight * 0.005),
       width: scrWidth,
-      height: scrHeight * 0.08,
+      height: scrHeight * (scrHeight < 750 ? 0.1 : 0.08),
       color: appColors.eventNote,
       child: Row(
         children: [

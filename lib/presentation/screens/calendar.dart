@@ -134,71 +134,81 @@ class _CalendarState extends State<Calendar> {
                       : Container(),
                 ),
                 Positioned(
-                  top: scrHeight * 0.08,
+                  top: scrHeight * 0.07,
                   left: scrWidth * 0.05,
-                  child: GetBuilder<RemainderController>(
-                    init: Get.put(RemainderController()),
-                    builder: (remainderController) {
-                      return Container(
-                        height: scrHeight * 0.5,
-                        width: scrWidth * 0.9,
-                        padding: EdgeInsets.zero,
-                        child: TableCalendar(
-                          headerVisible: true,
-                          firstDay: DateTime.utc(
-                              today.year - 1, today.month, today.day),
-                          lastDay: DateTime.utc(
-                              today.year + 10, today.month, today.day),
-                          focusedDay: focusedDay,
-                          currentDay: currentDay,
-                          daysOfWeekHeight: scrHeight * 0.04 * fontScaleFactor,
-                          onDaySelected: (selectedDay, focusedDay) {
-                            this.focusedDay = focusedDay;
-                            currentDay = selectedDay;
-                            remainderController.getTodayRemainders(DateTime(
-                              currentDay.year,
-                              currentDay.month,
-                              currentDay.day,
-                            ));
-                            setState(() {});
-                          },
-                          calendarStyle: CalendarStyle(
-                            selectedDecoration: todayDecoration,
-                            todayDecoration: todayDecoration,
-                            selectedTextStyle: selectedStyle,
-                            todayTextStyle: calendarTextStyle,
-                            defaultTextStyle: defaultStyle,
-                            weekendTextStyle: weekEndStyle,
-                            isTodayHighlighted: true,
+                  right: scrHeight * 0.07,
+                  bottom: 0,
+                  child: SizedBox(
+                    height: scrHeight * 0.8,
+                    width: scrWidth,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: scrHeight * 0.59,
+                            width: scrWidth * 0.9,
+                            padding: EdgeInsets.zero,
+                            child: TableCalendar(
+                              headerVisible: true,
+                              firstDay: DateTime.utc(
+                                  today.year - 1, today.month, today.day),
+                              lastDay: DateTime.utc(
+                                  today.year + 10, today.month, today.day),
+                              focusedDay: focusedDay,
+                              currentDay: currentDay,
+                              daysOfWeekHeight:
+                                  scrHeight * 0.04 * fontScaleFactor,
+                              onDaySelected: (selectedDay, focusedDay) {
+                                this.focusedDay = focusedDay;
+                                currentDay = selectedDay;
+                                remController.getTodayRemainders(DateTime(
+                                  currentDay.year,
+                                  currentDay.month,
+                                  currentDay.day,
+                                ));
+                                setState(() {});
+                              },
+                              calendarStyle: CalendarStyle(
+                                selectedDecoration: todayDecoration,
+                                todayDecoration: todayDecoration,
+                                selectedTextStyle: selectedStyle,
+                                todayTextStyle: calendarTextStyle,
+                                defaultTextStyle: defaultStyle,
+                                weekendTextStyle: weekEndStyle,
+                                isTodayHighlighted: true,
+                              ),
+                              remainderController: remController,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  bottom: scrHeight * 0.005,
-                  left: scrHeight * 0.025,
-                  child: GetBuilder<RemainderController>(
-                    init: Get.put(RemainderController()),
-                    builder: (remainderController) {
-                      return Container(
-                        height: scrHeight * 0.3,
-                        width: scrWidth * 0.9,
-                        padding: EdgeInsets.zero,
-                        color: appColors.white,
-                        child: ListView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: remainderController.length,
-                          padding: EdgeInsets.all(scrHeight * 0.005),
-                          itemBuilder: (context, index) {
-                            return Remainder(
-                              remainder: remainderController.remainder[index],
-                            );
-                          },
-                        ),
-                      );
-                    },
+                          GetBuilder<RemainderController>(
+                            init: remController,
+                            builder: (remainderController) {
+                              return Container(
+                                height:
+                                    scrHeight * (scrHeight < 750 ? 0.2 : 0.3),
+                                width: scrWidth * 0.9,
+                                padding: EdgeInsets.zero,
+                                color: appColors.white,
+                                child: ListView.builder(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  itemCount: remainderController.length,
+                                  padding: EdgeInsets.all(scrHeight * 0.005),
+                                  itemBuilder: (context, index) {
+                                    return Remainder(
+                                      remainder:
+                                          remainderController.remainder[index],
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],

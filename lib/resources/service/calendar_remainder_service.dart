@@ -27,6 +27,27 @@ class _CalendarRemainderService {
     return list;
   }
 
+  Future<List<int>> getRemainderDates(
+      DateTime startDate, DateTime endDate) async {
+    Set<int> dates = {};
+    List<CalendarRemainder>? list = [];
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await _remainders
+        .where(
+          'remainderDate',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
+          isLessThanOrEqualTo: Timestamp.fromDate(endDate),
+        )
+        .get();
+    list = querySnapshot.docs
+        .map((e) => CalendarRemainder.fromJson(e.data(), e.id))
+        .cast<CalendarRemainder>()
+        .toList();
+    for (var element in list) {
+      dates.add(element.remainderDate?.day ?? 0);
+    }
+    return dates.toList();
+  }
+
   Future<bool> add(CalendarRemainder remainder) async {
     return await _remainders.add(remainder.toJson()).then((value) {
       return true;

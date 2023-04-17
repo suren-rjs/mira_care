@@ -8,12 +8,32 @@ class RemainderController extends GetxController {
   final ValueNotifier<bool> _loading = ValueNotifier(false);
 
   List<CalendarRemainder> _calendarRemainder = [];
+  List<int> eventDates = [];
 
   @override
   void onInit() {
     super.onInit();
     _calendarRemainder.clear();
+    getMonthDates(DateTime.now().month);
     getTodayRemainders(DateTime.now());
+  }
+
+  Future<void> getMonthDates(int month) async {
+    eventDates.clear();
+
+    DateTime now = DateTime.now();
+    DateTime monthStartDate = DateTime(now.year, month, 1);
+    DateTime monthEndDate = DateTime(now.year, month + 1, 0);
+
+    await remainderService
+        .getRemainderDates(monthStartDate, monthEndDate)
+        .then((value) {
+      eventDates = value;
+      update();
+    }).onError((error, stackTrace) {
+      eventDates.clear();
+      update();
+    });
   }
 
   getRemainder() async {

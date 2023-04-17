@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/resources/controller/remainder_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import 'customization/calendar_builders.dart';
@@ -117,6 +118,8 @@ class TableCalendar<T> extends StatefulWidget {
 
   final void Function(PageController pageController)? onCalendarCreated;
 
+  final RemainderController remainderController;
+
   TableCalendar({
     Key? key,
     required DateTime focusedDay,
@@ -172,6 +175,7 @@ class TableCalendar<T> extends StatefulWidget {
     this.onPageChanged,
     this.onFormatChanged,
     this.onCalendarCreated,
+    required this.remainderController,
   })  : assert(availableCalendarFormats.keys.contains(calendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         assert(weekendDays.isNotEmpty
@@ -413,9 +417,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             simpleSwipeConfig: widget.simpleSwipeConfig,
             sixWeekMonthsEnforced: widget.sixWeekMonthsEnforced,
             onVerticalSwipe: _swipeCalendarFormat,
-            onPageChanged: (focusedDay) {
+            onPageChanged: (focusedDay) async {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
+              widget.remainderController
+                  .getMonthDates(focusedDay.month)
+                  .then((value) => setState(() {}));
             },
             weekNumbersVisible: widget.weekNumbersVisible,
             dowBuilder: (BuildContext context, DateTime day) {
@@ -508,6 +515,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
         final isToday = isSameDay(day, widget.currentDay);
         final isDisabled = _isDayDisabled(day);
         final isWeekend = _isWeekend(day, weekendDays: widget.weekendDays);
+        final isEventDay = _isEventDate(day);
 
         Widget content = CellContent(
           key: ValueKey('CellContent-${day.year}-${day.month}-${day.day}'),
@@ -526,6 +534,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
           isWeekend: isWeekend,
           isHoliday: widget.holidayPredicate?.call(day) ?? false,
           locale: widget.locale,
+          isEventDay: isEventDay,
         );
 
         children.add(content);
@@ -652,5 +661,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     List<int> weekendDays = const [DateTime.saturday, DateTime.sunday],
   }) {
     return weekendDays.contains(day.weekday);
+  }
+
+  bool _isEventDate(DateTime day) {
+    List<int> eventDays = widget.remainderController.eventDates;
+    return eventDays.contains(day.day);
   }
 }

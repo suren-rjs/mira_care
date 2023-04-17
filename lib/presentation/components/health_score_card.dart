@@ -20,8 +20,8 @@ class HealthScoreCard extends StatelessWidget {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
-    double cardHeight = scrHeight * 0.165;
-    double cardWidth = scrWidth * 0.45;
+    double cardHeight = scrHeight * (scrHeight < 750 ? 0.2 : 0.165);
+    double cardWidth = scrWidth * (scrHeight < 450 ? 0.2 : 0.45);
     return Container(
       width: cardWidth,
       height: cardHeight,

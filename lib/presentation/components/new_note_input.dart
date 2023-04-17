@@ -209,6 +209,7 @@ class _NewNoteInputState extends State<NewNoteInput> {
                           ));
                           noteMessage.clear();
                           clearFiles();
+                          FocusManager.instance.primaryFocus?.unfocus();
                         },
                         child: Container(
                           height: scrWidth * 0.125,

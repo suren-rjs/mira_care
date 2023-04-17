@@ -46,7 +46,7 @@ class Note {
   bool get isMultimediaMsg => multiMedia?.isNotEmpty ?? false;
 
   get contentHeightFactor =>
-      ((contentLength / 40) + (contentLength / 40 < 2 ? 1.1 : 0));
+      ((contentLength / 40) + (contentLength / 40 < 2 ? 1.25 : 0));
 
   get factor => contentLength < 25
       ? 0.055

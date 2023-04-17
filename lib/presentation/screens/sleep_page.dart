@@ -142,7 +142,7 @@ class _SleepPageState extends State<SleepPage> {
                       builder: (eventController) {
                         return Container(
                           padding: EdgeInsets.zero,
-                          height: scrHeight * (0.09 * eventController.length),
+                          height: scrHeight * ((scrHeight < 750 ? 0.12 : 0.09) * eventController.length),
                           child: ListView.builder(
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),

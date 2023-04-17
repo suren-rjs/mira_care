@@ -64,6 +64,8 @@ class CalendarStyle {
 
   final TextStyle weekendTextStyle;
 
+  final TextStyle weekendBoldTextStyle;
+
   final Decoration weekendDecoration;
 
   final TextStyle defaultTextStyle;
@@ -77,6 +79,8 @@ class CalendarStyle {
   final TableBorder tableBorder;
 
   final EdgeInsets tablePadding;
+
+  final TextStyle eventDayStyle;
 
   const CalendarStyle({
     this.isTodayHighlighted = true,
@@ -152,6 +156,15 @@ class CalendarStyle {
       shape: BoxShape.circle,
     ),
     this.weekendTextStyle = const TextStyle(color: Color(0xFFFF7A7A)),
+    this.weekendBoldTextStyle = const TextStyle(
+      color: Color(0xFFFF7A7A),
+      fontWeight: FontWeight.bold,
+    ),
+    this.eventDayStyle = const TextStyle(
+      color: Color(0xFF000000),
+      fontSize: 20.0,
+      fontWeight: FontWeight.bold,
+    ),
     this.weekendDecoration = const BoxDecoration(shape: BoxShape.circle),
     this.defaultTextStyle = const TextStyle(),
     this.defaultDecoration = const BoxDecoration(shape: BoxShape.circle),

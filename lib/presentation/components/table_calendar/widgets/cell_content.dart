@@ -18,6 +18,7 @@ class CellContent extends StatelessWidget {
   final bool isDisabled;
   final bool isHoliday;
   final bool isWeekend;
+  final bool isEventDay;
   final CalendarStyle calendarStyle;
   final CalendarBuilders calendarBuilders;
 
@@ -37,6 +38,7 @@ class CellContent extends StatelessWidget {
     required this.isDisabled,
     required this.isHoliday,
     required this.isWeekend,
+    required this.isEventDay,
     this.locale,
   }) : super(key: key);
 
@@ -116,7 +118,9 @@ class CellContent extends StatelessWidget {
               text,
               style: isWeekend
                   ? calendarStyle.weekendTextStyle
-                  : calendarStyle.todayTextStyle,
+                  : isEventDay
+                      ? calendarStyle.eventDayStyle
+                      : calendarStyle.todayTextStyle,
             ),
           );
     } else if (isHoliday) {
@@ -167,9 +171,11 @@ class CellContent extends StatelessWidget {
             alignment: alignment,
             child: Text(
               text,
-              style: isWeekend
-                  ? calendarStyle.weekendTextStyle
-                  : calendarStyle.defaultTextStyle,
+              style: isEventDay
+                  ? calendarStyle.eventDayStyle
+                  : isWeekend
+                      ? calendarStyle.weekendTextStyle
+                      : calendarStyle.defaultTextStyle,
             ),
           );
     }

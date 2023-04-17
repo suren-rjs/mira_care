@@ -18,7 +18,7 @@ class Remainder extends StatelessWidget {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width * 0.9;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
-    double dateCardHeight = scrHeight * 0.1;
+    double dateCardHeight = scrHeight * (scrHeight < 750 ? 0.125 : 0.1);
     var remColors = [
       appColors.remCol1,
       appColors.remCol2,
@@ -31,6 +31,7 @@ class Remainder extends StatelessWidget {
       appColors.remCol9,
       appColors.remCol10,
     ];
+    double textWidth = scrWidth * (scrWidth < 450 ? 0.5 : 0.65);
     return Container(
       padding: EdgeInsets.zero,
       margin: EdgeInsets.all(scrHeight * 0.005),
@@ -40,15 +41,16 @@ class Remainder extends StatelessWidget {
           Radius.circular(15),
         ),
       ),
-      width: scrWidth * 0.9,
+      width: scrWidth * 0.8,
       child: Row(
         children: [
           Container(
             padding: EdgeInsets.only(
-                right: (dateCardHeight - dateCardHeight * 0.95),
-                left: 0,
-                bottom: 0,
-                top: 0),
+              right: (dateCardHeight - dateCardHeight * 0.95),
+              left: 0,
+              bottom: 0,
+              top: 0,
+            ),
             height: dateCardHeight,
             width: dateCardHeight,
             decoration: BoxDecoration(
@@ -108,7 +110,7 @@ class Remainder extends StatelessWidget {
           Column(
             children: [
               SizedBox(
-                width: scrWidth * 0.65,
+                width: textWidth,
                 child: Text(
                   '${remainder.category}',
                   style: TextStyle(
@@ -120,7 +122,7 @@ class Remainder extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: scrWidth * 0.65,
+                width: textWidth,
                 child: Text(
                   '${remainder.message}',
                   style: TextStyle(
