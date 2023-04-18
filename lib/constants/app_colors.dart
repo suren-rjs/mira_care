@@ -25,6 +25,7 @@ class _AppColors {
   final Color attachment = const Color(0x4DA8A8A8);
   final Color borderGray = const Color(0xFFC0C0C0);
   final Color msgPin = const Color(0xFFD9D9D9);
+  final Color dropdownGray = const Color(0xFFE9E9E9);
   final Color weekDayBackground = const Color(0xFFEAEAEA);
   final Color backgroundGray = const Color(0xFFE8E8E8);
   final Color red = const Color(0xFFD32323);

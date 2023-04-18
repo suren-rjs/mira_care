@@ -43,7 +43,9 @@ class CommunityContact extends StatelessWidget {
             height: commCardHeight * 0.7,
             width: commCardHeight * 0.7,
             color: appColors.white,
-            child: AvatarImage(url: contact.imageUri ?? ""),
+            child: AvatarImage(
+              memoryImage: contact.image,
+            ),
           ),
           SizedBox(width: commCardHeight * 0.2),
           Container(
@@ -65,7 +67,7 @@ class CommunityContact extends StatelessWidget {
                 isContacts
                     ? Container()
                     : Text(
-                        '${contact.relation}',
+                  '${contact.jobTitle}',
                         style: TextStyle(
                           color: appColors.commRelationship,
                           fontSize: 16 * fontScaleFactor,

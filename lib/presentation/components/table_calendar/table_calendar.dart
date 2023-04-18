@@ -421,6 +421,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
             onPageChanged: (focusedDay) async {
               _focusedDay.value = focusedDay;
               widget.onPageChanged?.call(focusedDay);
+              if (widget.remainderController.currentMonth == focusedDay.month) {
+                return;
+              }
               widget.remainderController
                   .getMonthDates(focusedDay.month)
                   .then((value) => setState(() {}));

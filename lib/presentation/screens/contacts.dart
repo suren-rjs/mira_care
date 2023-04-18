@@ -1,8 +1,8 @@
 import 'package:contacts_service/contacts_service.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
-import 'package:mira_care/presentation/components/avatar_img.dart';
 import 'package:mira_care/presentation/components/community_contact.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 import 'package:mira_care/resources/data/model/user_contact.dart';
@@ -21,19 +21,32 @@ class _ContactsState extends State<Contacts> {
   var viewController = Get.put(ViewController());
   List<UserContact> contactList = [];
   late Future<List<UserContact>?> _contactLoader;
+  final List<String> items = [
+    'All Contacts',
+    'Medical',
+    'Caregivers',
+    'Family',
+    'Friends',
+    'School',
+    'Work',
+    'Others',
+  ];
+
+  String? selectedValue = 'All Contacts';
 
   @override
   void initState() {
     super.initState();
-    _contactLoader = _getPermission();
+    _contactLoader = _getContacts();
   }
 
   @override
   void dispose() {
     super.dispose();
+    contactList.clear();
   }
 
-  Future<List<UserContact>?> _getPermission() async {
+  Future<List<UserContact>?> _getContacts() async {
     final PermissionStatus permission = await Permission.contacts.status;
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.denied) {
@@ -49,19 +62,23 @@ class _ContactsState extends State<Contacts> {
         permission == PermissionStatus.limited) {
       return await getContacts();
     } else {
-      debugPrint('Status $permission');
       return [];
     }
   }
 
   Future<List<UserContact>> getContacts() async {
     final contacts = await ContactsService.getContacts();
+    contactList.clear();
     for (var contact in contacts) {
-      contactList.add(UserContact(
-          name: '${contact.givenName ?? contact.phones?[0].value}',
-          contact: '${contact.phones?[0].value}'));
+      contactList.add(
+        UserContact(
+          name: '${contact.displayName ?? contact.phones?[0].value}',
+          contact: '${contact.phones?[0].value}',
+          jobTitle: contact.jobTitle ?? 'Others',
+          image: contact.avatar,
+        ),
+      );
     }
-    debugPrint('Total Contacts ${contactList.length}');
     return contactList;
   }
 
@@ -70,8 +87,6 @@ class _ContactsState extends State<Contacts> {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
-    String url =
-        'https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg';
 
     return GetBuilder<ViewController>(
       init: viewController,
@@ -111,28 +126,105 @@ class _ContactsState extends State<Contacts> {
                               ),
                             ),
                             SizedBox(height: scrHeight * 0.02),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: scrWidth * 0.125,
-                                  height: scrWidth * 0.125,
-                                  child: AvatarImage(url: url),
-                                ),
-                                SizedBox(width: scrWidth * 0.05),
-                                SizedBox(
-                                  width: scrWidth * 0.6,
-                                  child: Text(
-                                    'View and communicate with people related to the care recipient',
-                                    style: TextStyle(
-                                      fontSize: 18 * fontScaleFactor,
-                                      color: appColors.black,
-                                      overflow: TextOverflow.ellipsis,
+                            Container(
+                              height: scrHeight * 0.07,
+                              width: scrWidth * 0.8,
+                              padding: const EdgeInsets.all(5),
+                              child: Center(
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    isExpanded: true,
+                                    hint: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            'All Contacts',
+                                            style: TextStyle(
+                                              fontSize: 18 * fontScaleFactor,
+                                              fontWeight: FontWeight.bold,
+                                              color: appColors.black,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    maxLines: 3,
+                                    items: items
+                                        .map(
+                                          (item) => DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: TextStyle(
+                                                fontSize: 18 * fontScaleFactor,
+                                                fontWeight: FontWeight.bold,
+                                                color: appColors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    value: selectedValue,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedValue = value as String;
+                                        _getContacts();
+                                        setState(() {});
+                                      });
+                                    },
+                                    buttonStyleData: ButtonStyleData(
+                                      height: scrHeight * 0.07,
+                                      width: scrWidth,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.05,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: appColors.dropdownGray,
+                                        ),
+                                        color: appColors.dropdownGray,
+                                      ),
+                                      elevation: 0,
+                                    ),
+                                    iconStyleData: IconStyleData(
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        size: 28 * fontScaleFactor,
+                                        color: appColors.black,
+                                      ),
+                                      iconSize: 14 * fontScaleFactor,
+                                      iconEnabledColor: appColors.dropdownGray,
+                                      iconDisabledColor: appColors.black25,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      maxHeight: scrHeight * 0.3,
+                                      width: scrWidth * 0.8,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: appColors.dropdownGray,
+                                      ),
+                                      elevation: 1,
+                                      scrollbarTheme: ScrollbarThemeData(
+                                        radius: const Radius.circular(40),
+                                        thickness:
+                                            MaterialStateProperty.all<double>(
+                                                6),
+                                        thumbVisibility:
+                                            MaterialStateProperty.all<bool>(
+                                          true,
+                                        ),
+                                      ),
+                                    ),
+                                    menuItemStyleData: const MenuItemStyleData(
+                                      height: 40,
+                                      padding:
+                                          EdgeInsets.only(left: 14, right: 14),
+                                    ),
                                   ),
-                                )
-                              ],
-                            )
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -157,6 +249,13 @@ class _ContactsState extends State<Contacts> {
                   builder: (BuildContext context,
                       AsyncSnapshot<List<UserContact>?> snapshot) {
                     if (snapshot.hasData) {
+                      if (![null, 'All Contacts'].contains(selectedValue)) {
+                        contactList = contactList
+                            .where((contact) =>
+                                '${contact.jobTitle?.toLowerCase()}' ==
+                                '${selectedValue?.toLowerCase()}')
+                            .toList();
+                      }
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         scrollDirection: Axis.vertical,

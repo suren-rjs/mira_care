@@ -6,6 +6,7 @@ import 'package:mira_care/resources/service/calendar_remainder_service.dart';
 class RemainderController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
+  int currentMonth = DateTime.now().month;
 
   List<CalendarRemainder> _calendarRemainder = [];
   List<int> eventDates = [];
@@ -19,6 +20,8 @@ class RemainderController extends GetxController {
   }
 
   Future<void> getMonthDates(int month) async {
+    if (currentMonth == month) return;
+    currentMonth = month;
     DateTime now = DateTime.now();
     DateTime monthStartDate = DateTime(now.year, month, 1);
     DateTime monthEndDate = DateTime(now.year, month + 1, 0);

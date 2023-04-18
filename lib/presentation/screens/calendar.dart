@@ -147,7 +147,7 @@ class _CalendarState extends State<Calendar> {
                       child: Column(
                         children: [
                           Container(
-                            height: scrHeight * 0.59,
+                            height: scrHeight * (scrHeight < 750 ? 0.59 : 0.5),
                             width: scrWidth * 0.9,
                             padding: EdgeInsets.zero,
                             child: TableCalendar(
@@ -161,6 +161,7 @@ class _CalendarState extends State<Calendar> {
                               daysOfWeekHeight:
                                   scrHeight * 0.04 * fontScaleFactor,
                               onDaySelected: (selectedDay, focusedDay) {
+                                if (focusedDay == currentDay) return;
                                 this.focusedDay = focusedDay;
                                 currentDay = selectedDay;
                                 remController.getTodayRemainders(DateTime(
