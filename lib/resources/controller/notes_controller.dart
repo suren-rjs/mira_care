@@ -26,6 +26,17 @@ class NotesController extends GetxController {
     });
   }
 
+  getTodayNotes() async {
+    _journalNotes.clear();
+    await journalNotesService.get().then((value) {
+      _journalNotes = value;
+      update();
+    }).onError((error, stackTrace) {
+      _journalNotes.clear();
+      update();
+    });
+  }
+
   newJournalNote(Note note) async {
     await journalNotesService.add(note);
     getJournalNotes();

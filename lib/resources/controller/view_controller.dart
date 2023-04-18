@@ -6,6 +6,7 @@ import 'package:mira_care/presentation/screens/community.dart';
 import 'package:mira_care/presentation/screens/contacts.dart';
 import 'package:mira_care/presentation/screens/dashboard.dart';
 import 'package:mira_care/presentation/screens/journal.dart';
+import 'package:mira_care/presentation/screens/report.dart';
 import 'package:mira_care/presentation/screens/sleep_page.dart';
 
 class ViewController extends GetxController {
@@ -50,6 +51,9 @@ class ViewController extends GetxController {
         break;
       case 6:
         currentScreen = const Contacts();
+        break;
+      case 7:
+        currentScreen = const Reporting();
         break;
     }
     update();

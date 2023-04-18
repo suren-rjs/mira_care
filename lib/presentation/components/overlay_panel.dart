@@ -84,61 +84,66 @@ class _OverlayPanelState extends State<OverlayPanel> {
                 left: scrWidth * 0.075,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.05),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MenuItem(
-                        iconUri: 'assets/images/dash.png',
-                        name: 'Dashboard',
-                        function: () => controller.changeScreenView(1),
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/journal.png',
-                        name: 'Journal',
-                        function: () => controller.changeScreenView(2),
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/calendar.png',
-                        name: 'Calendar',
-                        function: () => controller.changeScreenView(3),
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/community.png',
-                        name: 'Community',
-                        function: () => controller.changeScreenView(4),
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/message.png',
-                        name: 'Messaging',
-                        function: () {},
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/contact.png',
-                        name: 'Contacts',
-                        function: () => controller.changeScreenView(6),
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/reporting.png',
-                        name: 'Reporting',
-                        function: () {},
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/analytics.png',
-                        name: 'Analytics',
-                        function: () {},
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/profile.png',
-                        name: 'Profile',
-                        function: () {},
-                      ),
-                      MenuItem(
-                        iconUri: 'assets/images/settings.png',
-                        name: 'Settings',
-                        function: () {},
-                      ),
-                    ],
+                  height: scrHeight * 0.8,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MenuItem(
+                          iconUri: 'assets/images/dash.png',
+                          name: 'Dashboard',
+                          function: () => controller.changeScreenView(1),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/journal.png',
+                          name: 'Journal',
+                          function: () => controller.changeScreenView(2),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/calendar.png',
+                          name: 'Calendar',
+                          function: () => controller.changeScreenView(3),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/community.png',
+                          name: 'Community',
+                          function: () => controller.changeScreenView(4),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/message.png',
+                          name: 'Messaging',
+                          function: () {},
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/contact.png',
+                          name: 'Contacts',
+                          function: () => controller.changeScreenView(6),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/reporting.png',
+                          name: 'Reporting',
+                          function: () => controller.changeScreenView(7),
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/analytics.png',
+                          name: 'Analytics',
+                          function: () {},
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/profile.png',
+                          name: 'Profile',
+                          function: () {},
+                        ),
+                        MenuItem(
+                          iconUri: 'assets/images/settings.png',
+                          name: 'Settings',
+                          function: () {},
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

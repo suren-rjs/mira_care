@@ -203,6 +203,9 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     super.initState();
     _focusedDay = ValueNotifier(widget.focusedDay);
     _rangeSelectionMode = widget.rangeSelectionMode;
+    widget.remainderController
+        .getMonthDates(widget.focusedDay.month)
+        .then((value) => setState(() {}));
   }
 
   @override
@@ -220,7 +223,6 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> {
     if (widget.rangeStartDay == null && widget.rangeEndDay == null) {
       _firstSelectedDay = null;
     }
-    widget.remainderController.getMonthDates(widget.focusedDay.month);
   }
 
   @override

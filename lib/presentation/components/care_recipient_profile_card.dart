@@ -98,7 +98,7 @@ class CareRecipientProfileCard extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  left: (scrWidth / 2) - (scrWidth * 0.05),
+                  left: (scrWidth / 2) - (scrWidth * 0.085),
                   bottom: ((scrHeight * 0.2) / 4),
                   child: Container(
                     decoration: BoxDecoration(
