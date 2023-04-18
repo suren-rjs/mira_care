@@ -354,7 +354,7 @@ class _ReportingState extends State<Reporting> {
       onTap: function,
       child: Container(
         padding: EdgeInsets.all(scrWidth * 0.025),
-        height: scrHeight * 0.05,
+        height: scrHeight * (scrHeight < 750 ? 0.06 : 0.05),
         decoration: BoxDecoration(
           color: appColors.msgPin,
           borderRadius: const BorderRadius.all(Radius.circular(10)),
