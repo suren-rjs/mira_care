@@ -19,7 +19,10 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 class NewNoteInput extends StatefulWidget {
   const NewNoteInput({
     super.key,
+    this.isMessageInput = false,
   });
+
+  final bool? isMessageInput;
 
   @override
   State<StatefulWidget> createState() => _NewNoteInputState();
@@ -122,14 +125,16 @@ class _NewNoteInputState extends State<NewNoteInput> {
       builder: (controller) {
         return SizedBox(
           width: scrWidth,
-          height: scrHeight * 0.2,
+          height: scrHeight * 0.1,
           child: Stack(
             children: [
               Positioned(
                 bottom: 0,
                 child: Container(
                   height: scrHeight * 0.1,
-                  width: scrWidth,
+                  width: (widget.isMessageInput ?? false)
+                      ? scrWidth * 0.9
+                      : scrWidth,
                   padding: EdgeInsets.symmetric(
                     vertical: scrWidth * 0.02,
                   ),

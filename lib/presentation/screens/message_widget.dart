@@ -63,22 +63,18 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
       '.png',
     ].contains(extension)) {
       setState(() {
-        debugPrint('Updated !');
         iconPreview = 'img';
       });
     } else if (['.doc', '.docx'].contains(extension)) {
       setState(() {
-        debugPrint('Updated !');
         iconPreview = 'document';
       });
     } else if (['.pdf'].contains(extension)) {
       setState(() {
-        debugPrint('Updated !');
         iconPreview = 'pdf';
       });
     } else {
       setState(() {
-        debugPrint('Updated !');
         iconPreview = 'music';
       });
     }

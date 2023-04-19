@@ -6,6 +6,7 @@ import 'package:mira_care/presentation/screens/community.dart';
 import 'package:mira_care/presentation/screens/contacts.dart';
 import 'package:mira_care/presentation/screens/dashboard.dart';
 import 'package:mira_care/presentation/screens/journal.dart';
+import 'package:mira_care/presentation/screens/messaging.dart';
 import 'package:mira_care/presentation/screens/report.dart';
 import 'package:mira_care/presentation/screens/sleep_page.dart';
 
@@ -48,6 +49,9 @@ class ViewController extends GetxController {
         break;
       case 4:
         currentScreen = const Community();
+        break;
+      case 5:
+        currentScreen = const Messaging();
         break;
       case 6:
         currentScreen = const Contacts();

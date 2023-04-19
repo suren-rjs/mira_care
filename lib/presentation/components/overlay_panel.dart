@@ -118,7 +118,7 @@ class _OverlayPanelState extends State<OverlayPanel> {
                           MenuItem(
                             iconUri: 'assets/images/message.png',
                             name: 'Messaging',
-                            function: () {},
+                            function: () => controller.changeScreenView(5),
                           ),
                           MenuItem(
                             iconUri: 'assets/images/contact.png',
