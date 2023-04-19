@@ -62,13 +62,25 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
       '.WebP',
       '.png',
     ].contains(extension)) {
-      iconPreview = 'img';
+      setState(() {
+        debugPrint('Updated !');
+        iconPreview = 'img';
+      });
     } else if (['.doc', '.docx'].contains(extension)) {
-      iconPreview = 'document';
+      setState(() {
+        debugPrint('Updated !');
+        iconPreview = 'document';
+      });
     } else if (['.pdf'].contains(extension)) {
-      iconPreview = 'pdf';
+      setState(() {
+        debugPrint('Updated !');
+        iconPreview = 'pdf';
+      });
     } else {
-      iconPreview = 'music';
+      setState(() {
+        debugPrint('Updated !');
+        iconPreview = 'music';
+      });
     }
     return file;
   }

@@ -46,9 +46,9 @@ class _MessageInputState extends State<MessageInput> {
                   onPressed: _textEditingController.text.trim().isEmpty
                       ? null
                       : () {
-                          // Handle send message
-                          _textEditingController.clear();
-                          setState(() {});
+                          setState(() {
+                            _textEditingController.clear();
+                          });
                         },
                 ),
               ],

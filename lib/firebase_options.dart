@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,11 +46,23 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCPNfClh5pGabECKxryPItVPRTfq8mTQ0M',
+    appId: '1:1025342973015:web:24b860eeda3f83be1bef12',
+    messagingSenderId: '1025342973015',
+    projectId: 'health-care-hc',
+    authDomain: 'health-care-hc.firebaseapp.com',
+    databaseURL: 'https://health-care-hc-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'health-care-hc.appspot.com',
+    measurementId: 'G-23LE8EERN2',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAAg4zwZAViLNbyjOMUl6Yq42HJRakwVY0',
     appId: '1:1025342973015:android:de97f38313ce32d61bef12',
     messagingSenderId: '1025342973015',
     projectId: 'health-care-hc',
+    databaseURL: 'https://health-care-hc-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'health-care-hc.appspot.com',
   );
 
@@ -62,6 +71,7 @@ class DefaultFirebaseOptions {
     appId: '1:1025342973015:ios:936690bcedb7b28c1bef12',
     messagingSenderId: '1025342973015',
     projectId: 'health-care-hc',
+    databaseURL: 'https://health-care-hc-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'health-care-hc.appspot.com',
     iosClientId: '1025342973015-etn26m3rc5gbjhhsj5i3fk2dfqev6ukr.apps.googleusercontent.com',
     iosBundleId: 'com.burhanitech.miraCare',

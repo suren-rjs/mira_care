@@ -6,12 +6,14 @@ class UserContact {
     required this.name,
     this.jobTitle = 'Caregivers',
     required this.contact,
+    this.imageUri,
     this.image,
   });
 
   final String name;
   final String? jobTitle;
   final String contact;
+  final String? imageUri;
   final Uint8List? image;
 
   factory UserContact.fromRawJson(String str) =>
@@ -23,6 +25,7 @@ class UserContact {
         name: json["name"],
         jobTitle: json["jobTitle"],
         contact: json["contact"],
+        imageUri: json["imageUri"],
         image: json["image"],
       );
 
@@ -31,6 +34,7 @@ class UserContact {
         "name": name,
         "jobTitle": jobTitle,
         "contact": contact,
+        "imageUri": imageUri,
         "image": image,
       };
 }

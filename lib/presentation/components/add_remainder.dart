@@ -195,12 +195,13 @@ class _AddRemainderState extends State<AddRemainder> {
                     onChange: onTimeChanged,
                     minuteInterval: TimePickerInterval.FIVE,
                     onChangeDateTime: (DateTime dateTime) {
-                      time = Time(
-                        hour: dateTime.hour,
-                        minute: dateTime.minute,
-                        second: 00,
-                      );
-                      setState(() {});
+                      setState(() {
+                        time = Time(
+                          hour: dateTime.hour,
+                          minute: dateTime.minute,
+                          second: 00,
+                        );
+                      });
                     },
                   ),
                 );
@@ -230,23 +231,24 @@ class _AddRemainderState extends State<AddRemainder> {
                               DateFormat('dd-MM-yyyy ').format(selectedDate);
                         }
                       }
-                      onTimeChanged(time);
-                      Navigator.of(context).push(
-                        showPicker(
-                          context: context,
-                          value: time,
-                          onChange: onTimeChanged,
-                          minuteInterval: TimePickerInterval.FIVE,
-                          onChangeDateTime: (DateTime dateTime) {
-                            time = Time(
-                              hour: dateTime.hour,
-                              minute: dateTime.minute,
-                              second: 00,
-                            );
-                          },
-                        ),
-                      );
-                      setState(() {});
+                      setState(() {
+                        onTimeChanged(time);
+                        Navigator.of(context).push(
+                          showPicker(
+                            context: context,
+                            value: time,
+                            onChange: onTimeChanged,
+                            minuteInterval: TimePickerInterval.FIVE,
+                            onChangeDateTime: (DateTime dateTime) {
+                              time = Time(
+                                hour: dateTime.hour,
+                                minute: dateTime.minute,
+                                second: 00,
+                              );
+                            },
+                          ),
+                        );
+                      });
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/firebase_options.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
 import 'package:mira_care/presentation/components/community_contact.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
@@ -20,52 +21,69 @@ class _CommunityState extends State<Community> {
   var viewController = Get.put(ViewController());
   List<UserContact> contactList = [];
 
-  getImageFromUri(imageUrl) async {
-    Uint8List bytes =
-        (await NetworkAssetBundle(Uri.parse(imageUrl)).load(imageUrl))
-            .buffer
-            .asUint8List();
-
-    return bytes;
-  }
-
   initContactList() async {
     contactList = [
       UserContact(
         name: 'John Burke',
         contact: '9876543210',
-        image: await getImageFromUri(
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHQv_th9wq3ivQ1CVk7UZRxhbPq64oQrg5Q&usqp=CAU'),
+        // image: await getImageFromUri(
+        //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHQv_th9wq3ivQ1CVk7UZRxhbPq64oQrg5Q&usqp=CAU'),
+        imageUri:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzHQv_th9wq3ivQ1CVk7UZRxhbPq64oQrg5Q&usqp=CAU',
         jobTitle: 'Beth\'s Father',
       ),
       UserContact(
         name: 'Sara Burke',
         contact: '9876543210',
-        image: await getImageFromUri(
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR47eGNB4uktvhbGIeWWDPNl-0L1EBWByWRkg&usqp=CAU'),
+        // image: await getImageFromUri(
+        //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR47eGNB4uktvhbGIeWWDPNl-0L1EBWByWRkg&usqp=CAU'),
+        imageUri:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR47eGNB4uktvhbGIeWWDPNl-0L1EBWByWRkg&usqp=CAU',
         jobTitle: 'Beth\'s Mother',
       ),
       UserContact(
         name: 'Liz Burke',
         contact: '9876543210',
-        image: await getImageFromUri(
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80'),
+        // image: await getImageFromUri(
+        //     'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80'),
+        imageUri:
+            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlciUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80',
         jobTitle: 'Beth\'s Sister',
       ),
       UserContact(
         name: 'Monica',
         contact: '9876543210',
-        image: await getImageFromUri(
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSoQFvYAr4KD4S-iecBnmLmPf7zuyFyHkd8w&usqp=CAU'),
+        // image: await getImageFromUri(
+        //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSoQFvYAr4KD4S-iecBnmLmPf7zuyFyHkd8w&usqp=CAU'),
+        imageUri:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSoQFvYAr4KD4S-iecBnmLmPf7zuyFyHkd8w&usqp=CAU',
       ),
       UserContact(
         name: 'Kris',
         contact: '9876543210',
-        image: await getImageFromUri(
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4rTZQtYuv-8nlbcVxhj3ptBBgp9d1OW8MOgN_CJhUsYkz8eb-Wu2v7dW58Z2a20G9J9I&usqp=CAU'),
+        // image: await getImageFromUri(
+        //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4rTZQtYuv-8nlbcVxhj3ptBBgp9d1OW8MOgN_CJhUsYkz8eb-Wu2v7dW58Z2a20G9J9I&usqp=CAU'),
+        imageUri:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4rTZQtYuv-8nlbcVxhj3ptBBgp9d1OW8MOgN_CJhUsYkz8eb-Wu2v7dW58Z2a20G9J9I&usqp=CAU',
       ),
     ];
-    setState(() {});
+    setState(() {
+      debugPrint('SetState Called !');
+    });
+  }
+
+  getImageFromUri(imageUrl) async {
+    Uint8List bytes = (await NetworkAssetBundle(
+      Uri.parse(
+        DefaultFirebaseOptions.currentPlatform != DefaultFirebaseOptions.web
+            ? imageUrl
+            : 'https://cors-anywhere.herokuapp.com/$imageUrl',
+      ),
+    ).load(imageUrl))
+        .buffer
+        .asUint8List();
+
+    return bytes;
   }
 
   @override

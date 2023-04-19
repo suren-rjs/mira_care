@@ -295,9 +295,10 @@ class _NewNoteInputState extends State<NewNoteInput> {
                                   width: scrHeight * 0.02,
                                   child: InkWell(
                                     onTap: () {
-                                      localFiles.removeAt(index);
-                                      thumbArt.removeAt(index);
-                                      setState(() {});
+                                      setState(() {
+                                        localFiles.removeAt(index);
+                                        thumbArt.removeAt(index);
+                                      });
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

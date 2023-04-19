@@ -4,8 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:mime/mime.dart';
+import 'package:mira_care/firebase_options.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as p;
+
+// ignore: depend_on_referenced_packages
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -57,13 +60,18 @@ class _StorageService {
         .ref()
         .child('files/$name')
         .getDownloadURL();
-    var response = await http.get(Uri.parse(fileUrl));
+    var response = await http.get(
+      Uri.parse(
+        DefaultFirebaseOptions.currentPlatform != DefaultFirebaseOptions.web
+            ? fileUrl
+            : 'https://cors-anywhere.herokuapp.com/$fileUrl',
+      ),
+    );
     final tempDir = await getTemporaryDirectory();
     File file = await File('${tempDir.path}/$name').create();
     if (response.statusCode == 200) {
       Uint8List imageInUnit8List = response.bodyBytes;
       file.writeAsBytesSync(imageInUnit8List);
-      debugPrint('downloaded');
     }
     return file;
   }

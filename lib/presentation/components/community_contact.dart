@@ -44,6 +44,7 @@ class CommunityContact extends StatelessWidget {
             width: commCardHeight * 0.7,
             color: appColors.white,
             child: AvatarImage(
+              url: contact.imageUri,
               memoryImage: contact.image,
             ),
           ),
