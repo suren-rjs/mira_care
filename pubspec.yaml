@@ -29,6 +29,7 @@ dependencies:
   contacts_service: ^0.6.3
   permission_handler: ^10.2.0
   cached_network_image: ^3.2.3
+  ably_flutter: ^1.2.15
 
 dev_dependencies:
   flutter_test:

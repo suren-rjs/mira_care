@@ -7,26 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
-import 'package:mira_care/resources/data/model/journal_note.dart';
+import 'package:mira_care/resources/data/model/message.dart';
 import 'package:mira_care/resources/service/storage_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-class ReceivedMessage extends StatefulWidget {
-  const ReceivedMessage({
+class MessageWidget extends StatefulWidget {
+  const MessageWidget({
     super.key,
-    required this.note,
+    required this.message,
   });
 
-  final Note note;
+  final Message message;
 
   @override
-  State<StatefulWidget> createState() => _ReceivedMessageState();
+  State<StatefulWidget> createState() => _MessageWidgetState();
 }
 
-class _ReceivedMessageState extends State<ReceivedMessage> {
-  late Note note;
+class _MessageWidgetState extends State<MessageWidget> {
+  late Message message;
   late Future<File?> _fileLoader;
   bool isVideo = false;
   String iconPreview = 'img';
@@ -34,7 +34,7 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
   @override
   void initState() {
     super.initState();
-    note = widget.note;
+    message = widget.message;
   }
 
   Future<File?> getMultimediaPreview(String fileUri) async {
@@ -93,18 +93,34 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     String date = '';
 
+    bool isCurrentUserId = message.senderId == '1221';
+    bool isToday = DateFormat('dd MMM yyyy').format(message.dateTime) ==
+        DateFormat('dd MMM yyyy').format(DateTime.now());
+
+    bool isSameImg = message.imageUri ==
+        "https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg";
+
+    String avatarImage = isSameImg
+        ? "https://www.tensionends.com/wp-content/uploads/2022/09/Beautiful-Girl-DP-Images-1.jpg"
+        : '${message.imageUri}';
+
     try {
-      date = DateFormat('MMMM d, h:mm a').format(note.dateTime!);
+      date = DateFormat(isToday ? 'h:mm a' : 'MMMM d, h:mm a')
+          .format(message.dateTime);
     } catch (e) {
       debugPrint('Null value in date');
     }
 
-    double messageHeight = (scrHeight * note.factor) * note.contentHeightFactor;
-    String? fileUri = note.isMultimediaMsg ? note.multiMedia?.first : null;
+    double messageHeight =
+        (scrHeight * message.factor) * message.contentHeightFactor;
+    String? fileUri =
+        message.isMultiMediaMsg ? message.multiMedia?.first : null;
     if (fileUri != null) {
       _fileLoader = getMultimediaPreview(fileUri);
     }
     double multiMediaHeight = fileUri != null ? scrHeight * 0.125 : 0;
+
+    const Radius radius20 = Radius.circular(20);
     return Container(
       margin: EdgeInsets.symmetric(vertical: scrHeight * 0.005),
       width: scrHeight * 0.4,
@@ -113,15 +129,23 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
         children: [
           Positioned(
             bottom: scrHeight * 0.01,
+            left: isCurrentUserId ? null : 10,
+            right: isCurrentUserId ? 10 : null,
             child: SizedBox(
               height: scrWidth * 0.1,
               width: scrWidth * 0.1,
-              child: AvatarImage(url: note.avatarImage ?? ''),
+              child: AvatarImage(
+                  url: isCurrentUserId
+                      ? "https://newprofilepic2.photo-cdn.net//assets/images/article/profile.jpg"
+                      : avatarImage),
             ),
           ),
           Positioned(
             bottom: scrHeight * -0.025,
-            left: scrWidth * 0.15,
+            left: isCurrentUserId
+                ? scrWidth * (isToday ? 0.63 : 0.5)
+                : scrWidth * 0.15,
+            right: isCurrentUserId ? scrWidth * 0.15 : scrWidth * 0.5,
             child: SizedBox(
               height: scrWidth * 0.1,
               width: scrWidth * 0.7,
@@ -137,18 +161,22 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
           Positioned(
             top: 0,
             bottom: scrHeight * 0.03,
-            left: scrWidth * 0.15,
-            child: note.isMultimediaMsg
+            left: isCurrentUserId ? null : scrWidth * 0.15,
+            right: isCurrentUserId ? scrWidth * 0.15 : null,
+            child: message.isMultiMediaMsg
                 ? Container(
                     decoration: BoxDecoration(
-                      color: appColors.messageGray,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
+                      color: isCurrentUserId
+                          ? appColors.currentUser
+                          : appColors.messageGray,
+                      borderRadius: BorderRadius.only(
+                        topLeft: radius20,
+                        topRight: radius20,
+                        bottomRight: isCurrentUserId ? Radius.zero : radius20,
+                        bottomLeft: isCurrentUserId ? radius20 : Radius.zero,
                       ),
                     ),
-                    width: scrWidth * 0.69,
+                    width: scrWidth * 0.65,
                     child: Stack(
                       children: [
                         Positioned(
@@ -207,17 +235,23 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: appColors.messageGray,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
+                              borderRadius: BorderRadius.only(
+                                topLeft: radius20,
+                                topRight: radius20,
+                                bottomRight:
+                                    isCurrentUserId ? Radius.zero : radius20,
+                                bottomLeft:
+                                    isCurrentUserId ? radius20 : Radius.zero,
                               ),
                             ),
                             width: scrWidth * 0.69,
                             child: Container(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
                               child: Text(
-                                note.content ?? '',
+                                message.message,
                                 style: TextStyle(
                                   fontSize: 14 * fontScaleFactor,
                                   color: appColors.black,
@@ -232,18 +266,24 @@ class _ReceivedMessageState extends State<ReceivedMessage> {
                   )
                 : Container(
                     decoration: BoxDecoration(
-                      color: appColors.messageGray,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
+                      color: isCurrentUserId
+                          ? appColors.currentUser
+                          : appColors.messageGray,
+                      borderRadius: BorderRadius.only(
+                        topLeft: radius20,
+                        topRight: radius20,
+                        bottomRight: isCurrentUserId ? Radius.zero : radius20,
+                        bottomLeft: isCurrentUserId ? radius20 : Radius.zero,
                       ),
                     ),
-                    width: scrWidth * 0.69,
+                    width: scrWidth * 0.65,
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
                       child: Text(
-                        note.content ?? '',
+                        message.message,
                         style: TextStyle(
                           fontSize: 14 * fontScaleFactor,
                           color: appColors.black,

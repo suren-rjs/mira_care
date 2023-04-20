@@ -205,13 +205,15 @@ class _NewNoteInputState extends State<NewNoteInput> {
                               );
                             }
                           }
-                          await controller.newJournalNote(Note(
-                            avatarImage:
-                                avatarUri[Random().nextInt(avatarUri.length)],
-                            dateTime: DateTime.now(),
-                            content: noteMessage.text,
-                            multiMedia: uploadedUrl,
-                          ));
+                          await controller.newJournalNote(
+                            Note(
+                              avatarImage:
+                                  avatarUri[Random().nextInt(avatarUri.length)],
+                              dateTime: DateTime.now(),
+                              content: noteMessage.text,
+                              multiMedia: uploadedUrl,
+                            ),
+                          );
                           noteMessage.clear();
                           clearFiles();
                           FocusManager.instance.primaryFocus?.unfocus();

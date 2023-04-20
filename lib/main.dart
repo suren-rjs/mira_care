@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mira_care/resources/init_controllers.dart';
+import 'package:mira_care/resources/service/messaging_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'constants/app_colors.dart';
@@ -22,6 +23,8 @@ void main() async {
   if (DefaultFirebaseOptions.currentPlatform != DefaultFirebaseOptions.web) {
     await Permission.contacts.request();
   }
+  await messagingService.init();
+  await messagingService.subscribeToChannel('user1-user2');
   runApp(const MyApp());
 }
 

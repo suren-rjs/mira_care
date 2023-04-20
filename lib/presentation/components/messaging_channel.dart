@@ -1,19 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:mira_care/presentation/components/note_message.dart';
-import 'package:mira_care/resources/controller/notes_controller.dart';
+import 'dart:math';
 
-class Messages extends StatefulWidget {
-  const Messages({
-    super.key,
-  });
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:mira_care/presentation/components/message_widget.dart';
+import 'package:mira_care/resources/controller/notes_controller.dart';
+import 'package:mira_care/resources/data/model/journal_note.dart';
+import 'package:mira_care/resources/data/model/message.dart';
+
+class MessagingChannel extends StatefulWidget {
+  const MessagingChannel({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _MessagesState createState() => _MessagesState();
+  State<StatefulWidget> createState() => _MessagingChannelState();
 }
 
-class _MessagesState extends State<Messages> {
+class _MessagingChannelState extends State<MessagingChannel> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -38,17 +39,26 @@ class _MessagesState extends State<Messages> {
 
     return GetBuilder<NotesController>(
       init: Get.put(NotesController()),
-      builder: (notesCtrl) {
+      builder: (msgCtrl) {
         getLastNote();
+        List<String> userId = ['1212', '1221'];
         return SizedBox(
-          height: scrHeight * 0.625,
+          height: scrHeight * 0.6,
           width: scrWidth,
           child: ListView.builder(
             controller: _scrollController,
             padding: EdgeInsets.zero,
-            itemCount: notesCtrl.notesTotal,
+            itemCount: msgCtrl.notesTotal,
             itemBuilder: (context, index) {
-              return NoteMessage(note: notesCtrl.notes[index]);
+              Note note = msgCtrl.notes[index];
+              Message message = Message(
+                dateTime: note.dateTime ?? DateTime.now(),
+                senderId: userId[Random().nextInt(2)],
+                channelName: 'channelName',
+                message: '${note.content}',
+                imageUri: '${note.avatarImage}',
+              );
+              return MessageWidget(message: message);
             },
           ),
         );

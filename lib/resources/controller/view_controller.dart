@@ -28,7 +28,7 @@ class ViewController extends GetxController {
     update();
   }
 
-  void _changeMainScreenView(int selectedValue) {
+  void _changeMainScreenView(int selectedValue) async {
     _navigatorValue = selectedValue;
     switch (selectedValue) {
       case 1:

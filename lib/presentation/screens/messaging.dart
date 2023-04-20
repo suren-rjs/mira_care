@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
-import 'package:mira_care/presentation/components/messages.dart';
+import 'package:mira_care/presentation/components/messaging_channel.dart';
 import 'package:mira_care/presentation/components/new_note_input.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 
@@ -145,7 +145,7 @@ class _MessagingState extends State<Messaging> {
                       bottom: 0,
                       child: Column(
                         children: const [
-                          Messages(),
+                          MessagingChannel(),
                           NewNoteInput(
                             isMessageInput: true,
                           ),

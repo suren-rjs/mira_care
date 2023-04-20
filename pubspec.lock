@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  ably_flutter:
+    dependency: "direct main"
+    description:
+      name: ably_flutter
+      sha256: "4bc6065841433221d1787e98b2764a8ccce5e6786413b75523d0a35922fe2a30"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.15"
   async:
     dependency: transitive
     description:

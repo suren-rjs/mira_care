@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/journal_event.dart';
 import 'package:mira_care/presentation/components/vital_data.dart';
-import 'package:mira_care/presentation/screens/message_widget.dart';
+import 'package:mira_care/presentation/components/note_message.dart';
 import 'package:mira_care/resources/controller/event_controller.dart';
 import 'package:mira_care/resources/controller/notes_controller.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
@@ -320,7 +320,7 @@ class _ReportingState extends State<Reporting> {
         padding: EdgeInsets.zero,
         itemCount: notesCtrl.notesTotal,
         itemBuilder: (context, index) {
-          return ReceivedMessage(
+          return NoteMessage(
             note: notesCtrl.notes[index],
           );
         },

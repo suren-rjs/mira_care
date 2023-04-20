@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mira_care/presentation/screens/message_widget.dart';
+import 'package:mira_care/presentation/components/note_message.dart';
 import 'package:mira_care/resources/controller/notes_controller.dart';
 
 class NoteList extends StatefulWidget {
@@ -48,7 +48,7 @@ class _NoteListState extends State<NoteList> {
             padding: EdgeInsets.zero,
             itemCount: notesCtrl.notesTotal,
             itemBuilder: (context, index) {
-              return ReceivedMessage(note: notesCtrl.notes[index]);
+              return NoteMessage(note: notesCtrl.notes[index]);
             },
           ),
         );
