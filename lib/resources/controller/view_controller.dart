@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/presentation/screens/calendar.dart';
+import 'package:mira_care/presentation/screens/care_giver_profile.dart';
 import 'package:mira_care/presentation/screens/care_recipient_profile.dart';
 import 'package:mira_care/presentation/screens/community.dart';
 import 'package:mira_care/presentation/screens/contacts.dart';
@@ -39,6 +40,9 @@ class ViewController extends GetxController {
         break;
       case 12:
         currentScreen = const SleepPage();
+        break;
+      case 13:
+        currentScreen = const CareGiverProfileInfo();
         break;
       case 2:
         _journalPage = 0;
