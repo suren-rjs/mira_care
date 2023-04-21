@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
@@ -135,7 +136,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                               height: scrWidth * 0.1,
                               child: const AvatarImage(
                                 url:
-                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmInR4ljBH8rLmxngqj5KH5NIWJ6fdGtt8ow&usqp=CAU',
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmInR4ljBH8rLmxngqj5KH5NIWJ6fdGtt8ow&usqp=CAU',
                               ),
                             ),
                           ),
@@ -145,7 +146,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                               height: scrWidth * 0.1,
                               child: const AvatarImage(
                                 url:
-                                    'https://www.tensionends.com/wp-content/uploads/2022/09/Beautiful-Girl-DP-Images-1.jpg',
+                                'https://www.tensionends.com/wp-content/uploads/2022/09/Beautiful-Girl-DP-Images-1.jpg',
                               ),
                             ),
                           ),
@@ -184,6 +185,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Name',
                         'Sophia Thomas',
                         isEditProfile,
@@ -191,6 +193,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Email',
                         'sophia.thomas@mirakare.com',
                         isEditProfile,
@@ -198,6 +201,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Phone',
                         '8673467832',
                         isEditProfile,
@@ -205,6 +209,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Timezone',
                         'Central Standard Time (GMT -6)',
                         isEditProfile,
@@ -212,6 +217,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Gender',
                         'Female',
                         isEditProfile,
@@ -219,6 +225,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Location',
                         'Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678',
                         isEditProfile,
@@ -226,6 +233,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Qualification',
                         'Masters in care giving',
                         isEditProfile,
@@ -233,6 +241,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                       columnWidget(
                         fontScaleFactor,
                         scrHeight,
+                        scrWidth,
                         'Age',
                         '34',
                         isEditProfile,
@@ -251,10 +260,13 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
   Column columnWidget(
     double fontScaleFactor,
     double scrHeight,
+    double scrWidth,
     String title,
     String value,
     bool editProfile,
   ) {
+    List<String> items = ['Male', 'Female', 'Third gender'];
+    String? selectedValue;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -269,33 +281,130 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
         ),
         SizedBox(height: scrHeight * 0.01),
         editProfile
-            ? SizedBox(
-                height: scrHeight * 0.06,
-                child: TextField(
-                  controller: TextEditingController(),
-                  maxLines: 1,
-                  minLines: 1,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+            ? (title == 'Gender')
+                ? Container(
+                    height: scrHeight * 0.07,
+                    width: scrWidth,
+                    padding: const EdgeInsets.all(5),
+                    decoration: const BoxDecoration(),
+                    child: Center(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select',
+                                  style: TextStyle(
+                                    fontSize: 16 * fontScaleFactor,
+                                    color: appColors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                          items: items
+                              .map(
+                                (item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      fontSize: 16 * fontScaleFactor,
+                                      color: appColors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          value: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          },
+                          buttonStyleData: ButtonStyleData(
+                            height: scrHeight * 0.07,
+                            width: scrWidth,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: scrWidth * 0.05,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: appColors.msgHintGray,
+                              ),
+                              color: appColors.white,
+                            ),
+                            elevation: 0,
+                          ),
+                          iconStyleData: IconStyleData(
+                            icon: Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              size: 28 * fontScaleFactor,
+                              color: appColors.black,
+                            ),
+                            iconSize: 14 * fontScaleFactor,
+                            iconEnabledColor: appColors.dropdownGray,
+                            iconDisabledColor: appColors.black25,
+                          ),
+                          dropdownStyleData: DropdownStyleData(
+                            maxHeight: scrHeight * 0.3,
+                            width: scrWidth * 0.825,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: appColors.white,
+                            ),
+                            elevation: 1,
+                            scrollbarTheme: ScrollbarThemeData(
+                              radius: const Radius.circular(40),
+                              thickness: MaterialStateProperty.all<double>(6),
+                              thumbVisibility: MaterialStateProperty.all<bool>(
+                                true,
+                              ),
+                            ),
+                          ),
+                          menuItemStyleData: const MenuItemStyleData(
+                            height: 40,
+                            padding: EdgeInsets.only(
+                              left: 14,
+                              right: 14,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    hintText: 'Enter $title',
-                    hintStyle: TextStyle(
-                      color: appColors.msgHintGray,
-                      fontSize: 16 * fontScaleFactor,
+                  )
+                : SizedBox(
+                    height: scrHeight * 0.06,
+                    child: TextField(
+                      controller: TextEditingController(),
+                      maxLines: 1,
+                      minLines: 1,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        hintText: 'Enter $title',
+                        hintStyle: TextStyle(
+                          color: appColors.msgHintGray,
+                          fontSize: 16 * fontScaleFactor,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
                     ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-              )
+                  )
             : Text(
                 value,
                 style: TextStyle(
