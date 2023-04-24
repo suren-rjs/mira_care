@@ -8,11 +8,11 @@ class SignInWidget extends StatelessWidget {
   const SignInWidget({
     super.key,
     required this.phoneNumber,
-    required this.isSignInPage,
+    this.function,
   });
 
   final TextEditingController phoneNumber;
-  final ValueNotifier<bool> isSignInPage;
+  final Function()? function;
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +66,7 @@ class SignInWidget extends StatelessWidget {
             height: scrHeight * 0.045,
             width: scrWidth * 0.55,
             child: ElevatedButton(
-              onPressed: () {
-                isSignInPage.value = false;
-              },
+              onPressed: function,
               style: ElevatedButton.styleFrom(
                 elevation: 1,
               ),

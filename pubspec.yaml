@@ -31,6 +31,9 @@ dependencies:
   cached_network_image: ^3.2.3
   ably_flutter: ^1.2.15
   flutter_signin_button: ^2.0.0
+  flutter_secure_storage: ^8.0.0
+  lottie: ^2.3.2
+  firebase_auth: ^4.4.2
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +58,7 @@ flutter:
     - assets/images/reporting.png
     - assets/images/settings.png
     - assets/images/analytics.png
+    - assets/images/logout.png
     # Card Images
     - assets/images/blood_pressure.png
     - assets/images/heart_rate.png
@@ -79,3 +83,5 @@ flutter:
     - assets/images/img_msg.png
     - assets/images/img_phone.png
     - assets/images/img_error_contact.png
+    # Loading Animation
+    - assets/animation/loading.json

@@ -22,15 +22,16 @@ class OtpInputBoxes extends StatefulWidget {
 }
 
 class _OtpInputBoxesState extends State<OtpInputBoxes> {
-  List<String> code = ['', '', '', ''];
+  List<String> code = ['', '', '', '', '', ''];
 
   late List<TextEditingController> controllers;
   late List<FocusNode> focusNodes;
+  final int boxCount = 6;
 
   @override
   void initState() {
     super.initState();
-    focusNodes = List.generate(4, (index) => FocusNode());
+    focusNodes = List.generate(boxCount, (index) => FocusNode());
     updateControllers();
   }
 
@@ -50,22 +51,22 @@ class _OtpInputBoxesState extends State<OtpInputBoxes> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        4,
+        boxCount,
         (index) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
             child: SizedBox(
-              width: 50,
+              width: 30,
               height: 50,
               child: Container(
                 decoration: BoxDecoration(
                   color: appColors.msgPin,
                   borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
+                    Radius.circular(5),
                   ),
                 ),
                 child: TextField(
-                  style: TextStyle(color: appColors.red),
+                  style: TextStyle(color: appColors.scoreCardText75),
                   controller: controllers[index],
                   focusNode: focusNodes[index],
                   maxLength: 2,
@@ -73,8 +74,8 @@ class _OtpInputBoxesState extends State<OtpInputBoxes> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     counterText: "",
-                    contentPadding: EdgeInsets.only(
-                      left: MediaQuery.of(context).size.aspectRatio * 45,
+                    contentPadding: EdgeInsets.all(
+                      MediaQuery.of(context).size.aspectRatio * 20,
                     ),
                   ),
                   onChanged: (value) {
@@ -105,7 +106,7 @@ class _OtpInputBoxesState extends State<OtpInputBoxes> {
   }
 
   void updateControllers() {
-    controllers = List.generate(4, (index) {
+    controllers = List.generate(boxCount, (index) {
       final ctrl = TextEditingController();
       ctrl.value = zwspEditingValue;
       return ctrl;
@@ -114,31 +115,5 @@ class _OtpInputBoxesState extends State<OtpInputBoxes> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       focusNodes[0].requestFocus();
     });
-  }
-
-  Widget buildCodeNumberBox() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: SizedBox(
-        width: 50,
-        height: 50,
-        child: Container(
-          decoration: BoxDecoration(
-            color: appColors.white,
-            borderRadius: BorderRadius.zero,
-          ),
-          child: Center(
-            child: Text(
-              '0',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                color: appColors.textGray,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -6,13 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mira_care/presentation/screens/login.dart';
 import 'package:mira_care/resources/init_controllers.dart';
 import 'package:mira_care/resources/service/messaging_service.dart';
+import 'package:mira_care/resources/service/secure_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'constants/app_colors.dart';
 import 'firebase_options.dart';
+import 'presentation/screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await secureStorage.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -47,7 +50,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialBinding: InitRequiredControllers(),
-      home: const Login(),
+      home: const AuthScreen(),
     );
   }
 }

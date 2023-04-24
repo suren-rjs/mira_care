@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/presentation/components/app_background.dart';
 import 'package:mira_care/presentation/components/overlay_menu_row.dart';
+import 'package:mira_care/presentation/screens/login.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
+import 'package:mira_care/resources/service/secure_storage.dart';
 
 class OverlayPanel extends StatefulWidget {
   const OverlayPanel({super.key});
@@ -144,6 +146,21 @@ class _OverlayPanelState extends State<OverlayPanel> {
                             iconUri: 'assets/images/settings.png',
                             name: 'Settings',
                             function: () {},
+                          ),
+                          MenuItem(
+                            iconUri: 'assets/images/logout.png',
+                            name: 'Logout',
+                            function: () async {
+                              await secureStorage.add(
+                                'login',
+                                '0',
+                              );
+                              // ignore: use_build_context_synchronously
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const Login()),
+                                  (Route route) => false);
+                            },
                           ),
                         ],
                       ),

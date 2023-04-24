@@ -46,6 +46,7 @@ class _AppColors {
   final Color remCol9 = const Color(0xFFD9A600);
   final Color remCol10 = const Color(0xFF00D945);
   final Color calendarAnc50 = const Color(0x7453C5EA);
+  final Color loadingBackground = const Color(0xBF180959);
   final Color calendarAnc = const Color(0xFF53C5EA);
   final Color weekend = const Color(0xFFFF7A7A);
   final Color timeColor = const Color(0xFF5BADED);
