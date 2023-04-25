@@ -7,6 +7,7 @@ import 'package:mira_care/resources/controller/user_controller.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 import 'package:mira_care/resources/data/model/auth_user.dart';
 import 'package:mira_care/resources/service/secure_storage.dart';
+import 'package:mira_care/utils/app_utils.dart';
 
 class CareGiverProfileInfo extends StatefulWidget {
   const CareGiverProfileInfo({super.key});
@@ -27,11 +28,23 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
   TextEditingController locationController = TextEditingController();
   TextEditingController qualificationController = TextEditingController();
   TextEditingController ageController = TextEditingController();
+  TextEditingController userTypeController = TextEditingController();
 
   void checkIfNewUser() async {
-    await Get.put(UserController()).getUserProfile();
     isNewUser = await secureStorage.get('new-user') == '1';
-    isEditProfile = Get.put(UserController()).currentUser != null;
+    phoneController.text = await secureStorage.get('mobile') ?? '';
+    userTypeController.text =
+        await secureStorage.get('userType') ?? 'CareTaker';
+
+    DateTime now = DateTime.now();
+    String offset = now.timeZoneOffset.toString().split('.').first;
+    String formattedOffset =
+        'GMT${offset.startsWith('-') ? '-' : '+'}${offset.substring(0, 4)}';
+
+    timeZoneController =
+        TextEditingController(text: 'Central Standard Time ($formattedOffset)');
+
+    isEditProfile = isNewUser;
     setState(() {});
   }
 
@@ -66,8 +79,16 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
             emailController.text = currentUser.email ?? '';
             locationController.text = currentUser.address ?? '';
             phoneController.text = currentUser.phone ?? '';
-            timeZoneController.text = currentUser.timeZone ?? '';
-            genderController.text = currentUser.gender ?? '';
+            if (![null, ''].contains(currentUser.timeZone)) {
+              timeZoneController.text = currentUser.timeZone!;
+            }
+            if (![null, ''].contains(currentUser.gender)) {
+              genderController.text = currentUser.gender!;
+            }
+            if (![null, ''].contains(currentUser.userType)) {
+              userTypeController.text = currentUser.userType!;
+              secureStorage.add('userType', '${currentUser.userType}');
+            }
             qualificationController.text = currentUser.qualification ?? '';
             ageController.text = currentUser.age ?? '';
           }
@@ -132,12 +153,17 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                                 phone: phoneController.text,
                                 qualification: qualificationController.text,
                                 timeZone: timeZoneController.text,
+                                id: currentUser?.id,
+                                userType: await secureStorage.get('userType'),
+                                communityChannelId:
+                                    userTypeController.text == 'CareTaker'
+                                        ? await secureStorage.get('uid')
+                                        : '',
                               );
-                              if (isNewUser) {
-                                await controller.addUser(user);
-                              } else {
-                                await controller.updateUser(user);
-                              }
+                              await controller.addUser(user);
+                              // ignore: use_build_context_synchronously
+                              await appUtils.showToast(context, "Profile updated");
+                              await controller.getUserProfile();
                             }
                             setState(() {
                               isEditProfile = !isEditProfile;
@@ -230,6 +256,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                 Positioned(
                   top: scrHeight * 0.25,
                   left: scrWidth * 0.05,
+                  bottom: 0,
                   child: SizedBox(
                     width: scrHeight * 0.4,
                     height: scrHeight * 0.625,
@@ -248,6 +275,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Name',
                             nameController,
                             isEditProfile,
+                            false,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -256,6 +284,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Email',
                             emailController,
                             isEditProfile,
+                            false,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -264,6 +293,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Phone',
                             phoneController,
                             isEditProfile,
+                            true,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -272,6 +302,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Timezone',
                             timeZoneController,
                             isEditProfile,
+                            true,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -280,6 +311,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Gender',
                             genderController,
                             isEditProfile,
+                            false,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -288,6 +320,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Location',
                             locationController,
                             isEditProfile,
+                            false,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -296,6 +329,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Qualification',
                             qualificationController,
                             isEditProfile,
+                            false,
                           ),
                           columnWidget(
                             fontScaleFactor,
@@ -304,6 +338,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                             'Age',
                             ageController,
                             isEditProfile,
+                            false,
                           ),
                         ],
                       ),
@@ -325,6 +360,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
     String title,
     TextEditingController controller,
     bool editProfile,
+    bool isReadOnly,
   ) {
     List<String> items = ['Male', 'Female', 'Third gender'];
     String? selectedValue;
@@ -446,6 +482,7 @@ class _CareGiverProfileInfoState extends State<CareGiverProfileInfo> {
                     height: scrHeight * 0.06,
                     child: TextField(
                       controller: controller,
+                      readOnly: isReadOnly,
                       maxLines: 1,
                       minLines: 1,
                       decoration: InputDecoration(

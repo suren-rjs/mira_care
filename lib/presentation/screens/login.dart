@@ -10,8 +10,10 @@ import 'package:mira_care/presentation/components/signin_widget.dart';
 import 'package:mira_care/presentation/screens/home_page.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 import 'package:mira_care/resources/data/model/auth_user.dart';
+import 'package:mira_care/resources/service/messaging_service.dart';
 import 'package:mira_care/resources/service/secure_storage.dart';
 import 'package:mira_care/resources/service/user_service.dart';
+import 'package:mira_care/utils/app_utils.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -37,7 +39,6 @@ class _LoginState extends State<Login> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   sendOtpToMobileNumber() async {
-    debugPrint('Sending.... ${phoneNumber.text}');
     await firebaseAuth.verifyPhoneNumber(
       phoneNumber: '+91 ${phoneNumber.text}',
       verificationCompleted: (PhoneAuthCredential credential) {
@@ -63,25 +64,38 @@ class _LoginState extends State<Login> {
       verificationId: verificationId,
       smsCode: userCode,
     );
-    UserCredential userCredential =
-        await firebaseAuth.signInWithCredential(credential);
-    if (userCredential.user != null) {
-      await secureStorage.add("uid", userCredential.user?.uid ?? "");
-      await secureStorage.add('login', '1');
-      AuthUser? userInfo =
-          await userService.get(userCredential.user?.uid ?? '');
-      if (userInfo == null) {
-        secureStorage.add('new-user', '1');
-        Get.put(ViewController()).changeScreenView(13);
-      } else {
-        secureStorage.add('new-user', '0');
-      }
+    try {
+      UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(credential);
+      if (userCredential.user != null) {
+        await secureStorage.add("uid", userCredential.user?.uid ?? "");
+        await secureStorage.add('login', '1');
+        AuthUser? userInfo =
+            await userService.get(userCredential.user?.uid ?? '');
+        String userType = await secureStorage.get('userType') ?? '';
+        if (userType == 'CareTaker') {
+          await messagingService
+              .subscribeToChannel('${userCredential.user?.uid}');
+        }
+        if (userInfo == null) {
+          await secureStorage.add('new-user', '1');
+          await secureStorage.add('mobile', phoneNumber.text);
+          await messagingService.addNewChannel('${userCredential.user?.uid}');
+          Get.put(ViewController()).changeScreenView(13);
+          // ignore: use_build_context_synchronously
+          appUtils.showToast(context, "Complete Profile");
+        } else {
+          secureStorage.add('new-user', '0');
+        }
 
-      Get.to(
-        () => const MyHomePage(),
-      );
-    } else {
-      debugPrint('Error No User Credential Found');
+        Get.to(
+          () => const MyHomePage(),
+        );
+      } else {
+        debugPrint('Error No User Credential Found');
+      }
+    } catch (e) {
+      appUtils.showToast(context, "Invalid OTP");
     }
   }
 
@@ -92,7 +106,6 @@ class _LoginState extends State<Login> {
     super.initState();
     firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.setSettings(forceRecaptchaFlow: false);
-    firebaseAuth.signInAnonymously();
   }
 
   void activateTimer() async {
@@ -117,188 +130,212 @@ class _LoginState extends State<Login> {
         double scrHeight = contextSize.size.height;
         double scrWidth = contextSize.size.width;
         double fontScaleFactor = contextSize.textScaleFactor;
-        return WillPopScope(
-          onWillPop: () async {
-            setState(() {
-              isOtpSend.value = true;
-            });
-            return false;
-          },
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            backgroundColor: appColors.white,
-            body: Stack(
-              children: [
-                Positioned(
-                  top: scrHeight * 0,
-                  child: const AppBackground(),
-                ),
-                Positioned(
-                  top: scrHeight * 0.05,
-                  left: scrWidth * 0.35,
-                  right: scrWidth * 0.35,
-                  child: SizedBox(
-                    width: scrWidth * 0.3,
-                    height: scrHeight * 0.25,
-                    child: Image.asset('assets/images/logo.png'),
-                  ),
-                ),
-                Positioned(
-                  top: scrHeight * 0.25,
-                  left: scrWidth * 0.1,
-                  right: scrWidth * 0.1,
-                  child: Container(
-                    height: scrHeight * 0.65,
-                    width: scrWidth * 0.6,
-                    decoration: BoxDecoration(
-                      color: appColors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: scrHeight * 0.265,
+
+        bool isMobile = scrWidth <= 430;
+
+        return isMobile
+            ? WillPopScope(
+                onWillPop: () async {
+                  setState(() {
+                    isOtpSend.value = true;
+                  });
+                  return false;
+                },
+                child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  backgroundColor: appColors.white,
+                  body: Stack(
+                    children: [
+                      Positioned(
+                        top: scrHeight * 0,
+                        child: const AppBackground(),
+                      ),
+                      Positioned(
+                        top: scrHeight * 0.05,
+                        left: scrWidth * 0.35,
+                        right: scrWidth * 0.35,
+                        child: SizedBox(
+                          width: scrWidth * 0.3,
+                          height: scrHeight * 0.25,
+                          child: Image.asset('assets/images/logo.png'),
+                        ),
+                      ),
+                      Positioned(
+                        top: scrHeight * 0.25,
+                        left: scrWidth * 0.1,
+                        right: scrWidth * 0.1,
+                        child: Container(
+                          height: scrHeight * 0.65,
+                          width: scrWidth * 0.6,
                           decoration: BoxDecoration(
                             color: appColors.white,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Image.network(
-                            'https://iiflinsurance.com/images/separate-health-plan.jpg',
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        SizedBox(height: scrHeight * 0.04),
-                        SizedBox(
-                          height: scrHeight * 0.3,
-                          child: ValueListenableBuilder(
-                            valueListenable: isOtpSend,
-                            builder: (context, value, child) {
-                              if (value) {
-                                return SignInWidget(
-                                  phoneNumber: phoneNumber,
-                                  function: () async {
-                                    await sendOtpToMobileNumber();
-                                    isOtpSend.value = false;
-                                  },
-                                );
-                              } else {
-                                activateTimer();
-                                return Column(
-                                  children: [
-                                    OtpInputBoxes(otpController: otpController),
-                                    SizedBox(height: scrHeight * 0.02),
-                                    ValueListenableBuilder(
-                                      valueListenable: isTimerCompleted,
-                                      builder: (context, isCompleted, child) {
-                                        return Column(
-                                          children: [
-                                            isCompleted
-                                                ? Container()
-                                                : ValueListenableBuilder(
-                                                    valueListenable: timer,
-                                                    builder: (context, value,
-                                                        child) {
-                                                      return Text(
-                                                        'Resend code in $value Seconds',
-                                                      );
-                                                    },
-                                                  ),
-                                            SizedBox(height: scrHeight * 0.02),
-                                            SizedBox(
-                                              height: scrHeight * 0.045,
-                                              width: scrWidth * 0.55,
-                                              child: ElevatedButton(
-                                                onPressed: () async {
-                                                  if (otpController.text !=
-                                                      '') {
-                                                    await verifyCode(
-                                                      otpController.text,
-                                                    );
-                                                  } else {
-                                                    debugPrint(
-                                                      'Sms Code $smsCode, OTP : ${otpController.text}',
-                                                    );
-                                                  }
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  elevation: 1,
-                                                ),
-                                                child: Center(
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Continue',
-                                                        style: TextStyle(
-                                                          fontSize: 16 *
-                                                              fontScaleFactor,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          color:
-                                                              appColors.white,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: scrHeight * 0.265,
+                                decoration: BoxDecoration(
+                                  color: appColors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Image.network(
+                                  'https://iiflinsurance.com/images/separate-health-plan.jpg',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(height: scrHeight * 0.02),
+                              SizedBox(
+                                height: scrHeight * 0.35,
+                                child: ValueListenableBuilder(
+                                  valueListenable: isOtpSend,
+                                  builder: (context, value, child) {
+                                    if (value) {
+                                      return SignInWidget(
+                                        phoneNumber: phoneNumber,
+                                        function: () async {
+                                          await sendOtpToMobileNumber();
+                                          isOtpSend.value = false;
+                                        },
+                                      );
+                                    } else {
+                                      activateTimer();
+                                      return Column(
+                                        children: [
+                                          OtpInputBoxes(
+                                            otpController: otpController,
+                                          ),
+                                          SizedBox(height: scrHeight * 0.02),
+                                          ValueListenableBuilder(
+                                            valueListenable: isTimerCompleted,
+                                            builder:
+                                                (context, isCompleted, child) {
+                                              return Column(
+                                                children: [
+                                                  isCompleted
+                                                      ? Container()
+                                                      : ValueListenableBuilder(
+                                                          valueListenable:
+                                                              timer,
+                                                          builder: (context,
+                                                              value, child) {
+                                                            return Text(
+                                                              'Resend code in $value Seconds',
+                                                            );
+                                                          },
+                                                        ),
+                                                  SizedBox(
+                                                      height: scrHeight * 0.02),
+                                                  SizedBox(
+                                                    height: scrHeight * 0.045,
+                                                    width: scrWidth * 0.55,
+                                                    child: ElevatedButton(
+                                                      onPressed: () async {
+                                                        if (otpController
+                                                                .text !=
+                                                            '') {
+                                                          await verifyCode(
+                                                            otpController.text,
+                                                          );
+                                                        } else {
+                                                          debugPrint(
+                                                            'Sms Code $smsCode, OTP : ${otpController.text}',
+                                                          );
+                                                        }
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        elevation: 1,
+                                                      ),
+                                                      child: Center(
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              'Continue',
+                                                              style: TextStyle(
+                                                                fontSize: 16 *
+                                                                    fontScaleFactor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                                color: appColors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            Icon(
+                                                              Icons
+                                                                  .arrow_forward_ios_rounded,
+                                                              size: 16 *
+                                                                  fontScaleFactor,
+                                                              weight: 300,
+                                                              color: appColors
+                                                                  .white,
+                                                            )
+                                                          ],
                                                         ),
                                                       ),
-                                                      Icon(
-                                                        Icons
-                                                            .arrow_forward_ios_rounded,
-                                                        size: 16 *
-                                                            fontScaleFactor,
-                                                        weight: 300,
-                                                        color: appColors.white,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: scrHeight * 0.02),
-                                            isCompleted
-                                                ? InkWell(
-                                                    onTap: () {
-                                                      if (isResendEnabled) {
-                                                        setState(() {
-                                                          isResendEnabled =
-                                                              false;
-                                                        });
-                                                      }
-                                                    },
-                                                    child: Text(
-                                                      'Resend OTP',
-                                                      style: TextStyle(
-                                                        color: isResendEnabled
-                                                            ? appColors
-                                                                .scoreCardText
-                                                            : appColors
-                                                                .textGray,
-                                                        fontSize: 14 *
-                                                            fontScaleFactor,
-                                                      ),
                                                     ),
-                                                  )
-                                                : Container()
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
-                              }
-                            },
+                                                  ),
+                                                  SizedBox(
+                                                      height: scrHeight * 0.02),
+                                                  isCompleted
+                                                      ? InkWell(
+                                                          onTap: () {
+                                                            if (isResendEnabled) {
+                                                              setState(() {
+                                                                isResendEnabled =
+                                                                    false;
+                                                              });
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                            'Resend OTP',
+                                                            style: TextStyle(
+                                                              color: isResendEnabled
+                                                                  ? appColors
+                                                                      .scoreCardText
+                                                                  : appColors
+                                                                      .textGray,
+                                                              fontSize: 14 *
+                                                                  fontScaleFactor,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container()
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        );
+              )
+            : Center(
+                child: Text(
+                  'Use mobile view for better experience',
+                  style: TextStyle(
+                    color: appColors.black,
+                    fontSize: 18 * fontScaleFactor,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              );
       },
     );
   }

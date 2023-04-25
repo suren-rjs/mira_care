@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mira_care/resources/data/model/auth_user.dart';
 
 _UserService userService = _UserService.instance;
@@ -23,7 +24,9 @@ class _UserService {
           .cast<AuthUser>()
           .toList();
       userInfo = list.first;
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     return userInfo;
   }
 

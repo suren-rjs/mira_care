@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mira_care/presentation/screens/login.dart';
 import 'package:mira_care/resources/init_controllers.dart';
 import 'package:mira_care/resources/service/messaging_service.dart';
 import 'package:mira_care/resources/service/secure_storage.dart';
@@ -27,7 +26,6 @@ void main() async {
     await Permission.contacts.request();
   }
   await messagingService.init();
-  await messagingService.subscribeToChannel('user1-user2');
   runApp(const MyApp());
 }
 

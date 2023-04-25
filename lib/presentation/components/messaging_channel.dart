@@ -1,11 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/presentation/components/message_widget.dart';
-import 'package:mira_care/resources/controller/notes_controller.dart';
-import 'package:mira_care/resources/data/model/journal_note.dart';
+import 'package:mira_care/resources/controller/messaging_controller.dart';
 import 'package:mira_care/resources/data/model/message.dart';
+import 'package:mira_care/resources/service/secure_storage.dart';
 
 class MessagingChannel extends StatefulWidget {
   const MessagingChannel({super.key});
@@ -16,14 +14,21 @@ class MessagingChannel extends StatefulWidget {
 
 class _MessagingChannelState extends State<MessagingChannel> {
   final ScrollController _scrollController = ScrollController();
+  String channelId = '';
 
   @override
   void initState() {
     super.initState();
-    getLastNote();
+    getLastMessage();
+    getChannelId();
   }
 
-  getLastNote() async {
+  getChannelId() async {
+    channelId = await secureStorage.get('uid') ?? '';
+    Get.find<MessagingController>().setChannelId(channelId);
+  }
+
+  getLastMessage() async {
     await Future.delayed(const Duration(milliseconds: 500));
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
@@ -37,27 +42,19 @@ class _MessagingChannelState extends State<MessagingChannel> {
     double scrHeight = MediaQuery.of(context).size.height;
     double scrWidth = MediaQuery.of(context).size.width;
 
-    return GetBuilder<NotesController>(
-      init: Get.put(NotesController()),
+    return GetBuilder<MessagingController>(
+      init: Get.find<MessagingController>(),
       builder: (msgCtrl) {
-        getLastNote();
-        List<String> userId = ['1212', '1221'];
+        getLastMessage();
         return SizedBox(
           height: scrHeight * 0.6,
           width: scrWidth,
           child: ListView.builder(
             controller: _scrollController,
             padding: EdgeInsets.zero,
-            itemCount: msgCtrl.notesTotal,
+            itemCount: msgCtrl.messageTotal,
             itemBuilder: (context, index) {
-              Note note = msgCtrl.notes[index];
-              Message message = Message(
-                dateTime: note.dateTime ?? DateTime.now(),
-                senderId: userId[Random().nextInt(2)],
-                channelName: 'channelName',
-                message: '${note.content}',
-                imageUri: '${note.avatarImage}',
-              );
+              UserMessage message = msgCtrl.messages[index];
               return MessageWidget(message: message);
             },
           ),

@@ -28,7 +28,12 @@ class UserController extends GetxController {
   }
 
   Future<void> addUser(AuthUser user) async {
-    await userService.add(user);
+    AuthUser? userExists = await getUser('${user.uid}');
+    if (userExists == null) {
+      await userService.add(user);
+    } else {
+      await userService.update(user);
+    }
   }
 
   Future<void> updateUser(AuthUser user) async {

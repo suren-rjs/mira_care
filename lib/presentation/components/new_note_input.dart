@@ -8,9 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
+import 'package:mira_care/resources/controller/messaging_controller.dart';
 import 'package:mira_care/resources/controller/notes_controller.dart';
 import 'package:mira_care/resources/data/model/journal_note.dart';
+import 'package:mira_care/resources/data/model/message.dart';
 import 'package:mira_care/resources/helper/file_selector.dart';
+import 'package:mira_care/resources/service/secure_storage.dart';
 import 'package:mira_care/resources/service/storage_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -20,9 +23,11 @@ class NewNoteInput extends StatefulWidget {
   const NewNoteInput({
     super.key,
     this.isMessageInput = false,
+    this.controller,
   });
 
   final bool? isMessageInput;
+  final MessagingController? controller;
 
   @override
   State<StatefulWidget> createState() => _NewNoteInputState();
@@ -96,6 +101,10 @@ class _NewNoteInputState extends State<NewNoteInput> {
     setState(() {});
   }
 
+  MessagingController messagingController = Get.find<MessagingController>();
+  String channelId = '';
+  String senderId = '';
+
   void clearFiles() {
     localFiles.clear();
     thumbArt.clear();
@@ -106,6 +115,13 @@ class _NewNoteInputState extends State<NewNoteInput> {
   @override
   void initState() {
     super.initState();
+    messagingController = widget.controller ?? Get.find<MessagingController>();
+    getChannelId();
+  }
+
+  getChannelId() async {
+    channelId = await secureStorage.get('uid') ?? '';
+    senderId = await secureStorage.get('uid') ?? '';
   }
 
   @override
@@ -120,173 +136,227 @@ class _NewNoteInputState extends State<NewNoteInput> {
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     InputBorder borderStyle = InputBorder.none;
 
-    return GetBuilder<NotesController>(
-      init: Get.put(NotesController()),
-      builder: (controller) {
-        return SizedBox(
-          width: scrWidth,
-          height: scrHeight * 0.1,
-          child: Stack(
-            children: [
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  height: scrHeight * 0.1,
-                  width: (widget.isMessageInput ?? false)
-                      ? scrWidth * 0.9
-                      : scrWidth,
-                  padding: EdgeInsets.symmetric(
-                    vertical: scrWidth * 0.02,
-                  ),
-                  color: appColors.white,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                        onTap: () => selectFiles(),
-                        child: Container(
-                          height: scrWidth * 0.125,
-                          width: scrWidth * 0.125,
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: appColors.msgPin,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: Image.asset(
-                            'assets/images/pin_icon.png',
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: scrWidth * 0.125,
-                        width: scrWidth * 0.5,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.01,
-                        ),
-                        decoration: BoxDecoration(
-                          color: appColors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          border: Border.all(
-                            width: 1,
-                            color: appColors.msgInBorderGray,
-                          ),
-                        ),
-                        child: TextField(
-                          controller: noteMessage,
-                          maxLines: 3,
-                          minLines: 1,
-                          decoration: InputDecoration(
-                            border: borderStyle,
-                            hintText: 'Message',
-                            hintStyle: TextStyle(
-                              color: appColors.msgHintGray,
-                              fontSize: 16 * fontScaleFactor,
-                            ),
-                            errorBorder: borderStyle,
-                            focusedBorder: borderStyle,
-                            disabledBorder: borderStyle,
-                          ),
-                        ),
-                        // child: MessageInput(),
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          if (localFiles.isNotEmpty) {
-                            uploadedUrl.clear();
-                            for (var file in localFiles) {
-                              uploadedUrl.add(
-                                await storageService.fileUpload(file.path),
-                              );
-                            }
-                          }
-                          await controller.newJournalNote(
-                            Note(
-                              avatarImage:
-                                  avatarUri[Random().nextInt(avatarUri.length)],
-                              dateTime: DateTime.now(),
-                              content: noteMessage.text,
-                              multiMedia: uploadedUrl,
-                            ),
-                          );
-                          noteMessage.clear();
-                          clearFiles();
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                        child: Container(
-                          height: scrWidth * 0.125,
-                          width: scrWidth * 0.2,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: appColors.msgPin,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'Send',
-                              style: TextStyle(
-                                color: appColors.black,
-                                fontSize: 18 * fontScaleFactor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+    return SizedBox(
+      width: scrWidth,
+      height: scrHeight * 0.1,
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            child: Container(
+              height: scrHeight * 0.1,
+              width:
+                  (widget.isMessageInput ?? false) ? scrWidth * 0.9 : scrWidth,
+              padding: EdgeInsets.symmetric(
+                vertical: scrWidth * 0.02,
               ),
-              thumbArt.isNotEmpty
-                  ? Positioned(
-                      top: scrHeight * 0.01,
-                      bottom: scrHeight * 0.1,
-                      child: Container(
-                        height: scrHeight * 0.2,
-                        width: scrWidth,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.02,
+              color: appColors.white,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () => selectFiles(),
+                    child: Container(
+                      height: scrWidth * 0.125,
+                      width: scrWidth * 0.125,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: appColors.msgPin,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
                         ),
-                        color: appColors.attachment,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: thumbArt.length,
-                          itemBuilder: (context, index) {
-                            FileThumbArt thumbArtFile = thumbArt[index];
-                            String previewImage =
-                                'assets/images/${thumbArtFile.extension}_preview.png';
-                            String name = thumbArtFile.name;
-                            return Stack(
-                              children: [
-                                Positioned(
-                                  child: Container(
-                                    height: scrHeight * 0.07,
-                                    width: scrHeight * 0.07,
-                                    decoration: BoxDecoration(
-                                      color: appColors.transparent,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
+                      ),
+                      child: Image.asset(
+                        'assets/images/pin_icon.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: scrWidth * 0.125,
+                    width: scrWidth * 0.5,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.01,
+                    ),
+                    decoration: BoxDecoration(
+                      color: appColors.white,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                      border: Border.all(
+                        width: 1,
+                        color: appColors.msgInBorderGray,
+                      ),
+                    ),
+                    child: TextField(
+                      controller: noteMessage,
+                      maxLines: 3,
+                      minLines: 1,
+                      decoration: InputDecoration(
+                        border: borderStyle,
+                        hintText: 'Message',
+                        hintStyle: TextStyle(
+                          color: appColors.msgHintGray,
+                          fontSize: 16 * fontScaleFactor,
+                        ),
+                        errorBorder: borderStyle,
+                        focusedBorder: borderStyle,
+                        disabledBorder: borderStyle,
+                      ),
+                    ),
+                    // child: MessageInput(),
+                  ),
+                  (widget.isMessageInput ?? false)
+                      ? GetBuilder<MessagingController>(
+                          init: Get.find<MessagingController>(),
+                          builder: (controller) {
+                            return InkWell(
+                              onTap: () async {
+                                if (localFiles.isNotEmpty) {
+                                  uploadedUrl.clear();
+                                  for (var file in localFiles) {
+                                    uploadedUrl.add(
+                                      await storageService
+                                          .fileUpload(file.path),
+                                    );
+                                  }
+                                }
+                                await messagingController.addMessage(
+                                  UserMessage(
+                                    dateTime: DateTime.now(),
+                                    senderId: senderId,
+                                    channelId: channelId,
+                                    message: noteMessage.text,
+                                  ),
+                                );
+                                await messagingController.getMessages();
+                                noteMessage.clear();
+                                clearFiles();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              child: Container(
+                                height: scrWidth * 0.125,
+                                width: scrWidth * 0.2,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: appColors.msgPin,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Send',
+                                    style: TextStyle(
+                                      color: appColors.black,
+                                      fontSize: 18 * fontScaleFactor,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    margin: EdgeInsets.all(
-                                      scrHeight * 0.01,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )
+                      : GetBuilder<NotesController>(
+                          init: Get.put(NotesController()),
+                          builder: (controller) {
+                            return InkWell(
+                              onTap: () async {
+                                if (localFiles.isNotEmpty) {
+                                  uploadedUrl.clear();
+                                  for (var file in localFiles) {
+                                    uploadedUrl.add(
+                                      await storageService
+                                          .fileUpload(file.path),
+                                    );
+                                  }
+                                }
+                                await controller.newJournalNote(
+                                  Note(
+                                    avatarImage: avatarUri[
+                                        Random().nextInt(avatarUri.length)],
+                                    dateTime: DateTime.now(),
+                                    content: noteMessage.text,
+                                    multiMedia: uploadedUrl,
+                                  ),
+                                );
+                                noteMessage.clear();
+                                clearFiles();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              child: Container(
+                                height: scrWidth * 0.125,
+                                width: scrWidth * 0.2,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: appColors.msgPin,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Send',
+                                    style: TextStyle(
+                                      color: appColors.black,
+                                      fontSize: 18 * fontScaleFactor,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    child: Semantics(
-                                      label: name,
-                                      container: true,
-                                      child: ['image', 'video']
-                                              .contains(thumbArtFile.extension)
-                                          ? Image.file(
-                                              thumbArtFile.file,
-                                              fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ],
+              ),
+            ),
+          ),
+          thumbArt.isNotEmpty
+              ? Positioned(
+                  top: scrHeight * 0.01,
+                  bottom: scrHeight * 0.1,
+                  child: Container(
+                    height: scrHeight * 0.2,
+                    width: scrWidth,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.02,
+                    ),
+                    color: appColors.attachment,
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: thumbArt.length,
+                      itemBuilder: (context, index) {
+                        FileThumbArt thumbArtFile = thumbArt[index];
+                        String previewImage =
+                            'assets/images/${thumbArtFile.extension}_preview.png';
+                        String name = thumbArtFile.name;
+                        return Stack(
+                          children: [
+                            Positioned(
+                              child: Container(
+                                height: scrHeight * 0.07,
+                                width: scrHeight * 0.07,
+                                decoration: BoxDecoration(
+                                  color: appColors.transparent,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                margin: EdgeInsets.all(
+                                  scrHeight * 0.01,
+                                ),
+                                child: Semantics(
+                                  label: name,
+                                  container: true,
+                                  child: ['image', 'video']
+                                          .contains(thumbArtFile.extension)
+                                      ? Image.file(
+                                          thumbArtFile.file,
+                                          fit: BoxFit.fitWidth,
                                             )
                                           : Image.asset(
                                               previewImage,
@@ -352,7 +422,5 @@ class _NewNoteInputState extends State<NewNoteInput> {
             ],
           ),
         );
-      },
-    );
   }
 }

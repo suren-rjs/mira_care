@@ -10,6 +10,8 @@ import 'package:mira_care/presentation/screens/journal.dart';
 import 'package:mira_care/presentation/screens/messaging.dart';
 import 'package:mira_care/presentation/screens/report.dart';
 import 'package:mira_care/presentation/screens/sleep_page.dart';
+import 'package:mira_care/resources/controller/messaging_controller.dart';
+import 'package:mira_care/resources/controller/user_controller.dart';
 
 class ViewController extends GetxController {
   Widget currentScreen = const Dashboard();
@@ -30,6 +32,7 @@ class ViewController extends GetxController {
   }
 
   void _changeMainScreenView(int selectedValue) async {
+    if (selectedValue == _navigatorValue) return;
     _navigatorValue = selectedValue;
     switch (selectedValue) {
       case 1:
@@ -42,6 +45,7 @@ class ViewController extends GetxController {
         currentScreen = const SleepPage();
         break;
       case 13:
+        await Get.put(UserController()).getUserProfile();
         currentScreen = const CareGiverProfileInfo();
         break;
       case 2:

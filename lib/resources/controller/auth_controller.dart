@@ -15,6 +15,7 @@ class AuthController extends GetxController {
   getLoginStatus() async {
     try {
       bool isAuthenticated = await secureStorage.get('login') == '1';
+      await Future.delayed(const Duration(milliseconds: 500));
       currentScreen = isAuthenticated ? const MyHomePage() : const Login();
     } catch (e) {
       await secureStorage.add('login', '0');

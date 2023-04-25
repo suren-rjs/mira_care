@@ -1,50 +1,57 @@
 import 'dart:convert';
 
-class Message {
-  Message({
+class UserMessage {
+  UserMessage({
+    this.id,
     required this.dateTime,
     required this.senderId,
     this.receiverId,
-    required this.channelName,
+    required this.channelId,
     required this.message,
     this.multiMedia,
     this.status,
     this.imageUri,
   });
 
+  final String? id;
   final String senderId;
   final DateTime dateTime;
   final String? receiverId;
-  final String channelName;
+  final String channelId;
   final String message;
   final List<String>? multiMedia;
   final String? status;
   final String? imageUri;
 
-  factory Message.fromRawJson(String str) => Message.fromJson(json.decode(str));
+  factory UserMessage.fromRawJson(String str, String id) =>
+      UserMessage.fromJson(json.decode(str), id);
 
   String toRawJson() => json.encode(toJson());
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory UserMessage.fromJson(Map<String, dynamic> json, String id) =>
+      UserMessage(
         dateTime: DateTime.fromMillisecondsSinceEpoch(
           json["dateTime"].seconds * 1000,
         ),
         imageUri: json["imageUri"],
         senderId: json["senderId"],
         receiverId: json["receiverId"],
-        channelName: json["channelName"],
+        channelId: json["channelId"],
         message: json["message"],
         multiMedia: json["multiMedia"] == null
             ? []
             : List<String>.from(json["multiMedia"]!.map((x) => x)),
         status: json["status"],
+        id: id,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
+        "id": id,
         "dateTime": dateTime,
         "senderId": senderId,
         "receiverId": receiverId,
-        "channelName": channelName,
+        "channelId": channelId,
         "message": message,
         "multiMedia": multiMedia == null
             ? []

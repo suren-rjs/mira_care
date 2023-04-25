@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
 import 'package:mira_care/presentation/components/overlay_panel.dart';
+import 'package:mira_care/resources/controller/view_controller.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
@@ -39,12 +40,15 @@ class CustomAppBar extends StatelessWidget {
                     child: AvatarImage(url: url),
                   ),
                   SizedBox(width: scrWidth * 0.07),
-                  SizedBox(
-                    width: scrWidth * 0.25,
-                    height: scrHeight * 0.1,
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.fill,
+                  InkWell(
+                    onTap: () => Get.put(ViewController()).changeScreenView(1),
+                    child: SizedBox(
+                      width: scrWidth * 0.25,
+                      height: scrHeight * 0.1,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                 ],

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mira_care/presentation/components/app_background.dart';
 import 'package:mira_care/presentation/components/overlay_menu_row.dart';
 import 'package:mira_care/presentation/screens/login.dart';
+import 'package:mira_care/resources/controller/remainder_controller.dart';
 import 'package:mira_care/resources/controller/view_controller.dart';
 import 'package:mira_care/resources/service/secure_storage.dart';
 
@@ -110,7 +111,11 @@ class _OverlayPanelState extends State<OverlayPanel> {
                           MenuItem(
                             iconUri: 'assets/images/calendar.png',
                             name: 'Calendar',
-                            function: () => controller.changeScreenView(3),
+                            function: () async {
+                              RemainderController remController = Get.put(RemainderController());
+                              await remController.getMonthDates(DateTime.now().month);
+                              controller.changeScreenView(3);
+                            },
                           ),
                           MenuItem(
                             iconUri: 'assets/images/community.png',

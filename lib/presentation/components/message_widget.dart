@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mira_care/constants/app_colors.dart';
 import 'package:mira_care/presentation/components/avatar_img.dart';
 import 'package:mira_care/resources/data/model/message.dart';
+import 'package:mira_care/resources/service/secure_storage.dart';
 import 'package:mira_care/resources/service/storage_service.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -19,22 +20,29 @@ class MessageWidget extends StatefulWidget {
     required this.message,
   });
 
-  final Message message;
+  final UserMessage message;
 
   @override
   State<StatefulWidget> createState() => _MessageWidgetState();
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
-  late Message message;
+  late UserMessage message;
   late Future<File?> _fileLoader;
   bool isVideo = false;
   String iconPreview = 'img';
+  bool isCurrentUserId = false;
 
   @override
   void initState() {
     super.initState();
     message = widget.message;
+    getIsCurrentUser();
+  }
+
+  getIsCurrentUser() async {
+    isCurrentUserId = message.senderId == await secureStorage.get('uid');
+    setState(() {});
   }
 
   Future<File?> getMultimediaPreview(String fileUri) async {
@@ -92,8 +100,6 @@ class _MessageWidgetState extends State<MessageWidget> {
     double scrWidth = MediaQuery.of(context).size.width;
     double fontScaleFactor = MediaQuery.of(context).textScaleFactor;
     String date = '';
-
-    bool isCurrentUserId = message.senderId == '1221';
     bool isToday = DateFormat('dd MMM yyyy').format(message.dateTime) ==
         DateFormat('dd MMM yyyy').format(DateTime.now());
 
